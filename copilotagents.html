@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft Copilot Agents — Sales Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c10;
+    --surface: #16161e;
+    --surface2: #1e1e28;
+    --surface3: #252530;
+    --border: rgba(255,255,255,0.07);
+    --border-md: rgba(255,255,255,0.12);
+    --border-hi: rgba(255,255,255,0.18);
+    --text: #ececf4;
+    --text-sub: #b0b0c8;
+    --muted: #787890;
+    --accent-blue: #5b9cf6;
+    --accent-blue-dim: rgba(91,156,246,0.1);
+    --accent-blue-border: rgba(91,156,246,0.25);
+    --accent-green: #3ecf8e;
+    --accent-green-dim: rgba(62,207,142,0.1);
+    --accent-green-border: rgba(62,207,142,0.25);
+    --accent-amber: #f5a623;
+    --accent-amber-dim: rgba(245,166,35,0.1);
+    --accent-amber-border: rgba(245,166,35,0.25);
+    --accent-purple: #a78bfa;
+    --sidebar-w: 280px;
+    --radius: 14px;
+    --radius-sm: 9px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.65; }
+
+  .app { display: flex; height: 100vh; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar { width: var(--sidebar-w); flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; overflow-y: auto; }
+  .sidebar-brand { padding: 1.75rem 1.5rem 1.25rem; border-bottom: 1px solid var(--border); }
+  .brand-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #5b9cf6, #a78bfa); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; margin-bottom: 0.85rem; }
+  .brand-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1.3; }
+  .brand-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .sidebar-section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 1.25rem 1.5rem 0.5rem; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 0.75rem 1.5rem; cursor: pointer; border: none; background: none; width: 100%; text-align: left; border-left: 3px solid transparent; transition: background 0.15s, border-color 0.15s; }
+  .nav-item:hover { background: var(--surface2); }
+  .nav-item.active { background: var(--surface2); }
+  .nav-item.active.blue  { border-left-color: var(--accent-blue); }
+  .nav-item.active.green { border-left-color: var(--accent-green); }
+  .nav-item.active.amber { border-left-color: var(--accent-amber); }
+  .nav-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .nav-icon.blue  { background: var(--accent-blue-dim);  border: 1px solid var(--accent-blue-border); }
+  .nav-icon.green { background: var(--accent-green-dim); border: 1px solid var(--accent-green-border); }
+  .nav-icon.amber { background: var(--accent-amber-dim); border: 1px solid var(--accent-amber-border); }
+  .nav-text { flex: 1; }
+  .nav-name { font-size: 13px; font-weight: 500; color: var(--text); display: block; line-height: 1.3; }
+  .nav-desc { font-size: 11px; color: var(--muted); display: block; margin-top: 1px; }
+  .nav-arrow { font-size: 12px; color: var(--muted); opacity: 0; transition: opacity 0.15s; }
+  .nav-item:hover .nav-arrow, .nav-item.active .nav-arrow { opacity: 1; }
+  .sidebar-footer { margin-top: auto; padding: 1.25rem 1.5rem; border-top: 1px solid var(--border); }
+  .app-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .app-tag { font-size: 10px; padding: 3px 9px; border-radius: 12px; border: 1px solid var(--border-md); color: var(--muted); font-weight: 500; }
+
+  /* CONTENT */
+  .content-area { flex: 1; overflow-y: auto; height: 100vh; }
+  .agent-panel { display: none; }
+  .agent-panel.active { display: block; }
+
+  /* HERO */
+  .hero { padding: 3rem 3.5rem 2.5rem; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; }
+  .hero.blue::after  { background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), transparent); }
+  .hero.green::after { background: linear-gradient(90deg, var(--accent-green), var(--accent-blue), transparent); }
+  .hero.amber::after { background: linear-gradient(90deg, var(--accent-amber), var(--accent-green), transparent); }
+  .hero-inner { display: grid; grid-template-columns: 1fr 340px; gap: 3rem; align-items: start; }
+  .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+  .hero-title { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem; }
+  .hero-title .hl-blue  { color: var(--accent-blue); }
+  .hero-title .hl-green { color: var(--accent-green); }
+  .hero-title .hl-amber { color: var(--accent-amber); }
+  .hero-desc { font-size: 15px; color: var(--text-sub); line-height: 1.75; max-width: 560px; margin-bottom: 1.5rem; }
+  .hero-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip { font-size: 11.5px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-md); color: var(--muted); background: var(--surface2); }
+  .chip.blue  { border-color: var(--accent-blue-border);  color: var(--accent-blue);  background: var(--accent-blue-dim); }
+  .chip.green { border-color: var(--accent-green-border); color: var(--accent-green); background: var(--accent-green-dim); }
+  .chip.amber { border-color: var(--accent-amber-border); color: var(--accent-amber); background: var(--accent-amber-dim); }
+
+  /* HERO QUICK REF */
+  .hero-qref { background: var(--surface2); border: 1px solid var(--border-md); border-radius: var(--radius); padding: 1.25rem 1.5rem; }
+  .qref-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.85rem; }
+  .qref-row { display: flex; align-items: flex-start; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+  .qref-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .qref-key { color: var(--muted); flex-shrink: 0; width: 80px; font-size: 11.5px; padding-top: 1px; }
+  .qref-val { color: var(--text); font-weight: 500; line-height: 1.4; }
+
+  /* PAGE BODY */
+  .page-body { padding: 2.5rem 3.5rem 5rem; }
+
+  /* SECTION LABEL */
+  .section-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; margin-top: 2.5rem; display: flex; align-items: center; gap: 10px; }
+  .section-label:first-child { margin-top: 0; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* GRIDS */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+
+  /* WHY CARDS */
+  .why-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.25rem 1.4rem; }
+  .why-item .wi-icon { font-size: 1.5rem; display: block; margin-bottom: 0.7rem; }
+  .why-item h4 { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; margin-bottom: 0.35rem; color: var(--text); }
+  .why-item p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* FIELD TABLE */
+  .field-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+  .field-table th { text-align: left; padding: 9px 14px; background: var(--surface2); color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--border); font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .field-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  .field-table tr:last-child td { border-bottom: none; }
+  .field-table td:first-child { color: var(--muted); white-space: nowrap; width: 140px; font-size: 12.5px; }
+  .field-table .fv { font-weight: 500; }
+
+  /* COPY BLOCK */
+  .copy-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+  .cbh { display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 1.2rem; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  .cbh span { font-size: 11.5px; font-weight: 500; color: var(--muted); letter-spacing: 0.03em; }
+  .copy-btn { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; padding: 5px 13px; border-radius: 6px; border: 1px solid var(--border-hi); background: transparent; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 5px; transition: color 0.15s, background 0.15s; }
+  .copy-btn:hover { background: var(--surface3); color: var(--text); }
+  .copy-btn.copied { color: var(--accent-green); border-color: var(--accent-green-border); }
+  .copy-block pre { padding: 1.25rem; font-family: 'Courier New', monospace; font-size: 12.5px; line-height: 1.75; color: #c0c8d8; white-space: pre-wrap; word-break: break-word; overflow-y: auto; max-height: 320px; }
+
+  /* KNOWLEDGE */
+  .knowledge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .ki { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem 1.2rem; display: flex; align-items: flex-start; gap: 10px; }
+  .ki-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+  .ki-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .ki-desc { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+  .ki-req { font-size: 10px; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--accent-amber-border); color: var(--accent-amber); background: var(--accent-amber-dim); display: inline-block; margin-top: 5px; font-weight: 500; }
+  .ki-opt { font-size: 10px; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border-md); color: var(--muted); background: var(--surface2); display: inline-block; margin-top: 5px; font-weight: 500; }
+
+  /* CAPS */
+  .cap-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cap-item { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 7px 14px; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--border); color: var(--text-sub); }
+  .cap-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); flex-shrink: 0; }
+
+  /* PROMPTS */
+  .prompts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .prompt-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.15s, background 0.15s; }
+  .prompt-card:hover { border-color: var(--border-hi); background: var(--surface2); }
+  .pc-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); display: block; margin-bottom: 4px; font-weight: 600; }
+  .pc-text { font-size: 13.5px; color: var(--text); line-height: 1.6; flex: 1; }
+  .prompt-copy { font-size: 11px; padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border-md); background: transparent; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500; align-self: flex-start; transition: color 0.15s, border-color 0.15s; }
+  .prompt-copy:hover { color: var(--text); border-color: var(--border-hi); }
+  .prompt-copy.copied { color: var(--accent-green); border-color: var(--accent-green-border); }
+
+  /* TIPS */
+  .tips-box { background: var(--accent-blue-dim); border: 1px solid var(--accent-blue-border); border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; margin-top: 2.5rem; }
+  .tips-box h4 { font-size: 13px; font-weight: 500; color: var(--accent-blue); margin-bottom: 0.6rem; }
+  .tips-box ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+  .tips-box ul li { font-size: 13px; color: var(--text-sub); padding-left: 18px; position: relative; line-height: 1.6; }
+  .tips-box ul li::before { content: '→'; position: absolute; left: 0; color: var(--accent-blue); font-size: 11px; top: 4px; }
+
+  .cap-sublabel { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.75rem; }
+
+  /* START HERE */
+  .start-hero { padding: 3rem 3.5rem 2.5rem; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  .start-hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue), transparent); }
+  .start-hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+  .start-hero-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem; }
+  .start-hero-title span { color: var(--accent-purple); }
+  .start-hero-desc { font-size: 15px; color: var(--text-sub); line-height: 1.75; max-width: 620px; }
+
+  .path-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 0; }
+  .path-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .path-card-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .path-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .path-icon.teams  { background: rgba(100,130,240,0.12); border: 1px solid rgba(100,130,240,0.25); }
+  .path-icon.web    { background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.25); }
+  .path-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+  .path-subtitle { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .path-steps { padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .pstep { display: flex; gap: 14px; align-items: flex-start; }
+  .pstep-num { width: 24px; height: 24px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border-md); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+  .pstep-body { flex: 1; }
+  .pstep-title { font-size: 13.5px; font-weight: 500; color: var(--text); line-height: 1.4; margin-bottom: 3px; }
+  .pstep-desc { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+  .pstep-desc code { font-family: 'Courier New', monospace; font-size: 12px; background: var(--surface2); border: 1px solid var(--border-md); padding: 1px 6px; border-radius: 4px; color: var(--accent-blue); }
+  .pstep-tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-top: 5px; font-weight: 500; }
+  .pstep-tag.click { background: var(--accent-blue-dim); border: 1px solid var(--accent-blue-border); color: var(--accent-blue); }
+  .pstep-tag.type  { background: var(--accent-green-dim); border: 1px solid var(--accent-green-border); color: var(--accent-green); }
+  .pstep-tag.select { background: var(--accent-amber-dim); border: 1px solid var(--accent-amber-border); color: var(--accent-amber); }
+
+  .next-box { background: var(--surface2); border: 1px solid var(--border-md); border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; margin-top: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+  .next-box-text h4 { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .next-box-text p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .next-btns { display: flex; gap: 8px; flex-shrink: 0; }
+  .next-btn { font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 500; padding: 8px 18px; border-radius: 8px; border: 1px solid var(--border-hi); background: transparent; color: var(--text); cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+  .next-btn:hover { background: var(--surface3); }
+  .next-btn.primary { background: var(--accent-blue-dim); border-color: var(--accent-blue-border); color: var(--accent-blue); }
+  .next-btn.primary:hover { background: rgba(91,156,246,0.18); }
+
+  .prereq-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; }
+  .prereq-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 0.75rem; }
+  .prereq-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-sub); padding: 7px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+  .prereq-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); flex-shrink: 0; }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 10px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">✦</div>
+      <div class="brand-title">Microsoft Copilot<br>Agents</div>
+      <div class="brand-sub">Sales &amp; PC Playbook</div>
+    </div>
+
+    <div class="sidebar-section-label" style="padding-top:1rem;">Get Started</div>
+
+    <button class="nav-item active" onclick="showAgent('start')" id="nav-start" style="border-left-color: var(--accent-purple);">
+      <div class="nav-icon" style="background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.25);">🚀</div>
+      <div class="nav-text">
+        <span class="nav-name">Start Here</span>
+        <span class="nav-desc">How to create a new agent</span>
+      </div>
+      <span class="nav-arrow">›</span>
+    </button>
+
+    <div class="sidebar-section-label">Agents</div>
+
+    <button class="nav-item blue" onclick="showAgent('callprep')" id="nav-callprep">
+      <div class="nav-icon blue">📞</div>
+      <div class="nav-text">
+        <span class="nav-name">Call Prep</span>
+        <span class="nav-desc">Pre-call intelligence brief</span>
+      </div>
+      <span class="nav-arrow">›</span>
+    </button>
+
+    <button class="nav-item green" onclick="showAgent('triage')" id="nav-triage">
+      <div class="nav-icon green">📬</div>
+      <div class="nav-text">
+        <span class="nav-name">Email &amp; Teams Triage</span>
+        <span class="nav-desc">Inbox &amp; message priority</span>
+      </div>
+      <span class="nav-arrow">›</span>
+    </button>
+
+    <button class="nav-item amber" onclick="showAgent('briefing')" id="nav-briefing">
+      <div class="nav-icon amber">☀️</div>
+      <div class="nav-text">
+        <span class="nav-name">Morning Briefing</span>
+        <span class="nav-desc">Daily digest &amp; action items</span>
+      </div>
+      <span class="nav-arrow">›</span>
+    </button>
+
+    <div class="sidebar-footer">
+      <div style="font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Requires Access To</div>
+      <div class="app-tags">
+        <span class="app-tag">Copilot Studio</span>
+        <span class="app-tag">Outlook</span>
+        <span class="app-tag">Teams</span>
+        <span class="app-tag">SharePoint</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENT AREA -->
+  <div class="content-area">
+
+    <!-- ══ START HERE ══ -->
+    <div class="agent-panel active" id="panel-start">
+      <div class="start-hero">
+        <div class="start-hero-eyebrow">Before you begin</div>
+        <h1 class="start-hero-title">How to <span>create</span> a<br>Copilot Agent</h1>
+        <p class="start-hero-desc">Copilot Agents are custom AI assistants you build and configure yourself — no coding required. This guide walks you through getting to Agent Builder from both Microsoft Teams and the web, step by step.</p>
+      </div>
+
+      <div class="page-body">
+
+        <div class="section-label">What you'll need first</div>
+        <div class="prereq-box">
+          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;">Make sure you have access to the following before building. If you're unsure, check with your IT admin or manager.</div>
+          <div class="prereq-list">
+            <div class="prereq-item"><span class="prereq-dot"></span>Microsoft 365 Copilot license</div>
+            <div class="prereq-item"><span class="prereq-dot"></span>Access to Microsoft Teams or copilot.microsoft.com</div>
+            <div class="prereq-item"><span class="prereq-dot"></span>Permission to create agents (enabled by your org admin)</div>
+            <div class="prereq-item"><span class="prereq-dot"></span>SharePoint / Outlook access for knowledge sources</div>
+          </div>
+        </div>
+
+        <div class="section-label">Choose your path — Teams app or web browser</div>
+        <div class="path-grid">
+
+          <!-- TEAMS PATH -->
+          <div class="path-card">
+            <div class="path-card-header">
+              <div class="path-icon teams">💬</div>
+              <div>
+                <div class="path-title">Microsoft Teams</div>
+                <div class="path-subtitle">Recommended — access from your desktop or mobile app</div>
+              </div>
+            </div>
+            <div class="path-steps">
+              <div class="pstep">
+                <div class="pstep-num">1</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Open the Copilot app in Teams</div>
+                  <div class="pstep-desc">In the left sidebar of Teams, click the <strong>Copilot</strong> icon. If you don't see it, click the <strong>+</strong> (Apps) button and search for Copilot to add it.</div>
+                  <span class="pstep-tag click">Click</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">2</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Open the Agents panel</div>
+                  <div class="pstep-desc">In the top-right corner of the Copilot window, click the <strong>Agents</strong> button (looks like a sparkle or robot icon depending on your version).</div>
+                  <span class="pstep-tag click">Click</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">3</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Click "Create agent"</div>
+                  <div class="pstep-desc">At the top of the Agents panel, click <strong>+ Create agent</strong>. This opens the Agent Builder interface inside Teams.</div>
+                  <span class="pstep-tag click">Click</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">4</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Name your agent &amp; add a description</div>
+                  <div class="pstep-desc">Give your agent a clear name and a one-sentence description of what it does. Use the values from the agent pages in this guide — they're ready to copy.</div>
+                  <span class="pstep-tag type">Type</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">5</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Paste the system prompt into "Instructions"</div>
+                  <div class="pstep-desc">Scroll to the <strong>Instructions</strong> field. Copy the system prompt from this guide and paste it in. This is what shapes how the agent thinks and responds.</div>
+                  <span class="pstep-tag type">Paste</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">6</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Add knowledge sources</div>
+                  <div class="pstep-desc">Under <strong>Knowledge</strong>, connect the sources listed for each agent — Outlook, Teams, SharePoint, or Calendar. Required sources should be connected first.</div>
+                  <span class="pstep-tag select">Select</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">7</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Enable capabilities &amp; save</div>
+                  <div class="pstep-desc">Toggle on the capabilities listed in this guide, then click <strong>Save</strong> or <strong>Publish</strong>. Your agent will now appear in your Agents panel for reuse anytime.</div>
+                  <span class="pstep-tag click">Click</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- WEB PATH -->
+          <div class="path-card">
+            <div class="path-card-header">
+              <div class="path-icon web">🌐</div>
+              <div>
+                <div class="path-title">Web Browser</div>
+                <div class="path-subtitle">Use at copilot.microsoft.com when Teams isn't available</div>
+              </div>
+            </div>
+            <div class="path-steps">
+              <div class="pstep">
+                <div class="pstep-num">1</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Go to Copilot on the web</div>
+                  <div class="pstep-desc">Open your browser and navigate to <code>copilot.microsoft.com</code>. Sign in with your Microsoft 365 work account if prompted.</div>
+                  <span class="pstep-tag click">Navigate</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">2</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Open the Agents panel</div>
+                  <div class="pstep-desc">In the left sidebar, look for <strong>Agents</strong> or click the <strong>Explore Copilots</strong> option. This opens the agent management area.</div>
+                  <span class="pstep-tag click">Click</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">3</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Click "Create a Copilot"</div>
+                  <div class="pstep-desc">Look for the <strong>+ Create</strong> or <strong>Create a Copilot</strong> button. This launches the Agent Builder — the same interface used in Teams.</div>
+                  <span class="pstep-tag click">Click</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">4</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Name your agent &amp; add a description</div>
+                  <div class="pstep-desc">Give your agent a clear name and a one-sentence description of what it does. Use the values from the agent pages in this guide — they're ready to copy.</div>
+                  <span class="pstep-tag type">Type</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">5</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Paste the system prompt into "Instructions"</div>
+                  <div class="pstep-desc">Find the <strong>Instructions</strong> field in the Configure tab. Copy the system prompt from this guide and paste it in — this defines the agent's behavior.</div>
+                  <span class="pstep-tag type">Paste</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">6</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Add knowledge sources</div>
+                  <div class="pstep-desc">Under the <strong>Knowledge</strong> section, add the sources listed for each agent. You can connect SharePoint sites, Outlook, and other M365 data here.</div>
+                  <span class="pstep-tag select">Select</span>
+                </div>
+              </div>
+              <div class="pstep">
+                <div class="pstep-num">7</div>
+                <div class="pstep-body">
+                  <div class="pstep-title">Enable capabilities &amp; publish</div>
+                  <div class="pstep-desc">Enable the listed capabilities, then click <strong>Publish</strong>. Your agent is now live and accessible from your Copilot sidebar on the web and in Teams.</div>
+                  <span class="pstep-tag click">Click</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /path-grid -->
+
+        <div class="next-box">
+          <div class="next-box-text">
+            <h4>Ready to build your first agent?</h4>
+            <p>Pick one of the agents below — each page gives you the exact Agent Name, Description, System Prompt, Knowledge Sources, and Capabilities to configure. Everything is copy-ready.</p>
+          </div>
+          <div class="next-btns">
+            <button class="next-btn" onclick="showAgent('callprep')">📞 Call Prep</button>
+            <button class="next-btn" onclick="showAgent('triage')">📬 Email Triage</button>
+            <button class="next-btn primary" onclick="showAgent('briefing')">☀️ Morning Briefing</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ CALL PREP ══ -->
+    <div class="agent-panel" id="panel-callprep">
+      <div class="hero blue">
+        <div class="hero-inner">
+          <div>
+            <div class="hero-eyebrow">Agent 01 — Pre-Call Intelligence</div>
+            <h1 class="hero-title"><span class="hl-blue">Call Prep</span><br>Agent</h1>
+            <p class="hero-desc">Think of this as having a researcher on your team who reads everything about a dealer before you ever pick up the phone. This agent pulls together account history, open opportunities, recent activity, and product context — and hands you a structured brief in seconds, not minutes.</p>
+            <div class="hero-chips">
+              <span class="chip blue">Battle Card Generation</span>
+              <span class="chip blue">Account Summarization</span>
+              <span class="chip">CRM Awareness</span>
+              <span class="chip">Objection Prep</span>
+              <span class="chip">Discovery Questions</span>
+            </div>
+          </div>
+          <div class="hero-qref">
+            <div class="qref-label">Agent Builder — Quick Config</div>
+            <div class="qref-row"><span class="qref-key">Name</span><span class="qref-val">Call Prep Intelligence</span></div>
+
+            <div class="qref-row"><span class="qref-key">Sources</span><span class="qref-val">Outlook, Teams, SharePoint, Calendar</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <div class="section-label">Why use this agent</div>
+        <div class="three-col">
+          <div class="why-item"><span class="wi-icon">⚡</span><h4>Save 15–20 min per call</h4><p>Skip manually digging through Salesforce notes, email threads, and Seismic decks. The agent does it in one shot.</p></div>
+          <div class="why-item"><span class="wi-icon">🎯</span><h4>Walk in with context</h4><p>Know the dealer's product mix, last interaction, open action items, and likely objections before you say hello.</p></div>
+          <div class="why-item"><span class="wi-icon">🧠</span><h4>Sharper discovery questions</h4><p>When you already know the background, your questions are smarter — and dealers notice the difference.</p></div>
+        </div>
+
+        <div class="section-label">Setup — Agent Builder fields &amp; System Prompt</div>
+        <div class="two-col">
+          <table class="field-table">
+            <tr><th>Field</th><th>Value to enter</th></tr>
+            <tr><td>Agent Name</td><td class="fv">Call Prep Intelligence</td></tr>
+            <tr><td>Description</td><td class="fv">Generates structured call briefs for dealer sales conversations using account history, open opportunities, and product context.</td></tr>
+
+          </table>
+          <div class="copy-block">
+            <div class="cbh">
+              <span>System Prompt — paste into Agent Instructions</span>
+              <button class="copy-btn" onclick="copyBlock(this,'cp-prompt')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>
+            </div>
+            <pre id="cp-prompt">You are a Call Prep Intelligence assistant for sales professionals in the automotive software industry. Your job is to generate a structured, scannable call brief before a dealer conversation.
+
+When a user provides a dealer name, account context, or call type, you will output a brief that includes:
+
+1. ACCOUNT SNAPSHOT — Dealer name, group (if known), current products, tenure, and any recent changes.
+
+2. LAST INTERACTION SUMMARY — What was discussed, what was promised, and what remains unresolved.
+
+3. CALL OBJECTIVES — 2–3 clear goals for this specific call based on context.
+
+4. DISCOVERY QUESTIONS — 3–5 tailored open-ended questions aligned to the call type (retention, upsell, onboarding, QBR, etc.).
+
+5. LIKELY OBJECTIONS — Top 2–3 objections this dealer might raise, with a brief suggested response for each.
+
+6. TALKING POINTS — Key value props relevant to this dealer's product mix or situation.
+
+7. ACTION ITEMS TO CONFIRM — Any outstanding items from prior conversations to revisit.
+
+Keep each section brief and scannable. Use bullet points, not paragraphs. The user is reading this on their phone before a call.
+
+If the user provides only a dealer name, ask one clarifying question: "What's the purpose of this call — retention, upsell, onboarding, QBR, or something else?"</pre>
+          </div>
+        </div>
+
+        <div class="section-label">Knowledge Sources &amp; Capabilities</div>
+        <div class="two-col">
+          <div class="knowledge-grid">
+            <div class="ki"><span class="ki-icon">📧</span><div><div class="ki-name">Outlook Email</div><div class="ki-desc">Prior email threads with this dealer contact</div><span class="ki-req">Required</span></div></div>
+            <div class="ki"><span class="ki-icon">💬</span><div><div class="ki-name">Teams Chat &amp; Channels</div><div class="ki-desc">Internal deal discussions, handoff notes from SEs</div><span class="ki-req">Required</span></div></div>
+            <div class="ki"><span class="ki-icon">📁</span><div><div class="ki-name">SharePoint Files</div><div class="ki-desc">Product decks, QBR templates, account plans</div><span class="ki-opt">Recommended</span></div></div>
+            <div class="ki"><span class="ki-icon">📅</span><div><div class="ki-name">Outlook Calendar</div><div class="ki-desc">Upcoming meeting details, past meeting recaps</div><span class="ki-opt">Recommended</span></div></div>
+          </div>
+          <div>
+            <div class="cap-sublabel">Capabilities to enable</div>
+            <div class="cap-list">
+              <div class="cap-item"><span class="cap-dot"></span>Microsoft Graph Search</div>
+              <div class="cap-item"><span class="cap-dot"></span>Read SharePoint files</div>
+              <div class="cap-item"><span class="cap-dot"></span>Read Outlook email</div>
+              <div class="cap-item"><span class="cap-dot"></span>Read Teams messages</div>
+              <div class="cap-item"><span class="cap-dot"></span>Read Outlook calendar</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Suggested prompts</div>
+        <div class="prompts-grid">
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">Specific call</span>Build me a prep brief for a call with Anderson Ford. It's a retention check-in, they've been on VinSolutions for 2 years.</div><button class="prompt-copy" onclick="copyPrompt(this,`Build me a prep brief for a call with Anderson Ford. It's a retention check-in, they've been on VinSolutions for 2 years.`)">Copy prompt</button></div>
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">Upsell call</span>I have a call with Premier Automotive Group tomorrow to pitch Xtime. What should I know going in and what are the likely objections?</div><button class="prompt-copy" onclick="copyPrompt(this,'I have a call with Premier Automotive Group tomorrow to pitch Xtime. What should I know going in and what are the likely objections?')">Copy prompt</button></div>
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">QBR prep</span>Generate a QBR prep brief for Riverdale Motor Group. Pull any action items from the last 90 days and flag anything unresolved.</div><button class="prompt-copy" onclick="copyPrompt(this,'Generate a QBR prep brief for Riverdale Motor Group. Pull any action items from the last 90 days and flag anything unresolved.')">Copy prompt</button></div>
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">Discovery questions</span>What are the 5 best discovery questions I should ask a dealer considering adding vAuto to their existing VinSolutions setup?</div><button class="prompt-copy" onclick="copyPrompt(this,'What are the 5 best discovery questions I should ask a dealer considering adding vAuto to their existing VinSolutions setup?')">Copy prompt</button></div>
+        </div>
+
+        <div class="tips-box">
+          <h4>💡 Pro Tips</h4>
+          <ul>
+            <li>Run this agent 10–15 minutes before your call — not hours before, so the brief stays fresh.</li>
+            <li>Follow up with "Summarize the last 3 emails from this dealer" to pull in Outlook context automatically.</li>
+            <li>Add the brief to your meeting notes in Teams so your whole team has visibility post-call.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TRIAGE ══ -->
+    <div class="agent-panel" id="panel-triage">
+      <div class="hero green">
+        <div class="hero-inner">
+          <div>
+            <div class="hero-eyebrow">Agent 02 — Communications Intelligence</div>
+            <h1 class="hero-title"><span class="hl-green">Email &amp; Teams<br>Triage</span> Agent</h1>
+            <p class="hero-desc">Imagine starting every day knowing exactly what needs a response, what can wait, and what's noise — without reading 80 messages. This agent classifies your Outlook inbox and Teams notifications by urgency, surfaces what actually needs you, and drafts responses where it can.</p>
+            <div class="hero-chips">
+              <span class="chip green">Inbox Triage</span>
+              <span class="chip green">Teams Monitoring</span>
+              <span class="chip">Urgency Classification</span>
+              <span class="chip">Response Drafting</span>
+              <span class="chip">Dealer Escalation Detection</span>
+            </div>
+          </div>
+          <div class="hero-qref">
+            <div class="qref-label">Agent Builder — Quick Config</div>
+            <div class="qref-row"><span class="qref-key">Name</span><span class="qref-val">Email &amp; Teams Triage</span></div>
+
+            <div class="qref-row"><span class="qref-key">Sources</span><span class="qref-val">Outlook Inbox, Teams @mentions, Calendar</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <div class="section-label">Why use this agent</div>
+        <div class="three-col">
+          <div class="why-item"><span class="wi-icon">📬</span><h4>Stop drowning in volume</h4><p>Sales inboxes average 80–120 messages a day. This agent sorts the pile so you only touch what matters.</p></div>
+          <div class="why-item"><span class="wi-icon">🚦</span><h4>Hot / Warm / Low priority</h4><p>Every message gets a clear priority label based on sender, topic, urgency language, and dealer context.</p></div>
+          <div class="why-item"><span class="wi-icon">✍️</span><h4>Draft-ready responses</h4><p>For routine asks, the agent writes the response. You edit, approve, and send — no blank-page paralysis.</p></div>
+        </div>
+
+        <div class="section-label">Setup — Agent Builder fields &amp; System Prompt</div>
+        <div class="two-col">
+          <table class="field-table">
+            <tr><th>Field</th><th>Value to enter</th></tr>
+            <tr><td>Agent Name</td><td class="fv">Email &amp; Teams Triage</td></tr>
+            <tr><td>Description</td><td class="fv">Classifies and summarizes incoming Outlook and Teams messages by urgency. Surfaces action items and drafts responses for sales professionals.</td></tr>
+
+          </table>
+          <div class="copy-block">
+            <div class="cbh">
+              <span>System Prompt — paste into Agent Instructions</span>
+              <button class="copy-btn" onclick="copyBlock(this,'tr-prompt')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>
+            </div>
+            <pre id="tr-prompt">You are an Email and Teams Triage assistant for sales professionals. Your job is to scan incoming messages, classify them by urgency, surface what requires action, and draft responses where possible.
+
+CLASSIFICATION SYSTEM:
+- 🔴 HOT — Dealer escalation, executive involvement, contract or cancellation risk, time-sensitive deliverable due today, or anything flagged urgent by the sender.
+- 🟡 WARM — Questions requiring a response within 24 hours, follow-ups on open deals, meeting requests, or cross-functional asks.
+- 🟢 LOW — FYI threads, newsletters, CC'd loops, automated notifications, and anything that needs no direct response.
+
+For each message reviewed, output:
+- Priority label (🔴 HOT / 🟡 WARM / 🟢 LOW)
+- Sender and subject
+- One-sentence summary of what they need
+- Recommended action (Reply, Delegate, Archive, Schedule, or No Action)
+- Draft response (for HOT and WARM items — keep it concise, professional, and actionable)
+
+DEALER-AWARE LOGIC:
+Elevate priority if the sender is a dealer, a dealer group contact, or an account flagged as at-risk. Mentions of "cancel," "not renewing," "competitor," "frustrated," or "executive" should always bump to HOT.
+
+At the end of the triage output, provide a 3-line summary:
+Total messages reviewed / HOT count / Key action you'd recommend tackling first.
+
+If the user asks to triage only Teams or only email, scope accordingly. If they say "all," scan both.</pre>
+          </div>
+        </div>
+
+        <div class="section-label">Knowledge Sources &amp; Capabilities</div>
+        <div class="two-col">
+          <div class="knowledge-grid">
+            <div class="ki"><span class="ki-icon">📧</span><div><div class="ki-name">Outlook Inbox</div><div class="ki-desc">All incoming mail, flagged items, and unread messages</div><span class="ki-req">Required</span></div></div>
+            <div class="ki"><span class="ki-icon">💬</span><div><div class="ki-name">Teams Messages &amp; @mentions</div><div class="ki-desc">Direct messages, @mentions in channels, activity feed</div><span class="ki-req">Required</span></div></div>
+            <div class="ki"><span class="ki-icon">📅</span><div><div class="ki-name">Outlook Calendar</div><div class="ki-desc">Helps contextualize meeting requests and deadlines</div><span class="ki-opt">Recommended</span></div></div>
+            <div class="ki"><span class="ki-icon">📁</span><div><div class="ki-name">SharePoint / OneDrive</div><div class="ki-desc">Reference docs if a message asks about a specific file</div><span class="ki-opt">Optional</span></div></div>
+          </div>
+          <div>
+            <div class="cap-sublabel">Capabilities to enable</div>
+            <div class="cap-list">
+              <div class="cap-item"><span class="cap-dot"></span>Read Outlook inbox &amp; mail</div>
+              <div class="cap-item"><span class="cap-dot"></span>Read Teams messages &amp; @mentions</div>
+              <div class="cap-item"><span class="cap-dot"></span>Draft Outlook email responses</div>
+              <div class="cap-item"><span class="cap-dot"></span>Read Outlook calendar</div>
+              <div class="cap-item"><span class="cap-dot"></span>Microsoft Graph Search</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Suggested prompts</div>
+        <div class="prompts-grid">
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">Morning scan</span>Triage my inbox and Teams from the last 18 hours. Show me everything HOT first, then WARM. Skip anything LOW unless I ask.</div><button class="prompt-copy" onclick="copyPrompt(this,'Triage my inbox and Teams from the last 18 hours. Show me everything HOT first, then WARM. Skip anything LOW unless I ask.')">Copy prompt</button></div>
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">Dealer-specific</span>Are there any unread messages from dealers in my inbox or Teams? Flag anything that looks like a complaint, escalation, or cancellation risk.</div><button class="prompt-copy" onclick="copyPrompt(this,'Are there any unread messages from dealers in my inbox or Teams? Flag anything that looks like a complaint, escalation, or cancellation risk.')">Copy prompt</button></div>
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">Draft a response</span>Draft a professional response to the last email from [Dealer Name]. Keep it under 4 sentences and confirm receipt of their concern.</div><button class="prompt-copy" onclick="copyPrompt(this,'Draft a professional response to the last email from [Dealer Name]. Keep it under 4 sentences and confirm receipt of their concern.')">Copy prompt</button></div>
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">End of day</span>What messages came in today that I haven't responded to yet? Are any of them HOT that I need to handle before tomorrow?</div><button class="prompt-copy" onclick="copyPrompt(this,`What messages came in today that I haven't responded to yet? Are any of them HOT that I need to handle before tomorrow?`)">Copy prompt</button></div>
+        </div>
+
+        <div class="tips-box">
+          <h4>💡 Pro Tips</h4>
+          <ul>
+            <li>Set this as your first Copilot interaction of the day — run it before you touch your inbox manually.</li>
+            <li>Tell the agent your key dealer accounts upfront: "Treat any message from [Group Name] as HOT by default."</li>
+            <li>Use it at end of day too for a "did I miss anything?" sweep before you close out.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MORNING BRIEFING ══ -->
+    <div class="agent-panel" id="panel-briefing">
+      <div class="hero amber">
+        <div class="hero-inner">
+          <div>
+            <div class="hero-eyebrow">Agent 03 — Daily Intelligence</div>
+            <h1 class="hero-title"><span class="hl-amber">Morning<br>Briefing</span> Agent</h1>
+            <p class="hero-desc">Like a chief of staff who reads everything while you slept and hands you a one-page summary when you wake up. This agent reviews yesterday's meetings, emails, and Teams activity — surfaces unresolved action items, flags what needs to happen today, and gets you oriented before your first call.</p>
+            <div class="hero-chips">
+              <span class="chip amber">Meeting Recap</span>
+              <span class="chip amber">Action Item Tracking</span>
+              <span class="chip">Daily Agenda</span>
+              <span class="chip">Yesterday's Digest</span>
+              <span class="chip">Proactive Nudges</span>
+            </div>
+          </div>
+          <div class="hero-qref">
+            <div class="qref-label">Agent Builder — Quick Config</div>
+            <div class="qref-row"><span class="qref-key">Name</span><span class="qref-val">Morning Briefing</span></div>
+
+            <div class="qref-row"><span class="qref-key">Sources</span><span class="qref-val">Calendar, Email, Teams, Transcripts</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <div class="section-label">Why use this agent</div>
+        <div class="three-col">
+          <div class="why-item"><span class="wi-icon">☀️</span><h4>Start sharp every day</h4><p>Know what happened yesterday, what was promised, and what's on deck — before you read a single message.</p></div>
+          <div class="why-item"><span class="wi-icon">✅</span><h4>Nothing slips through</h4><p>Outstanding action items surface automatically. No more "I forgot to follow up" moments after a busy week.</p></div>
+          <div class="why-item"><span class="wi-icon">📋</span><h4>Meeting recaps on demand</h4><p>Summarizes what was discussed, decided, and delegated in yesterday's calls — even if you didn't take notes.</p></div>
+        </div>
+
+        <div class="section-label">Setup — Agent Builder fields &amp; System Prompt</div>
+        <div class="two-col">
+          <table class="field-table">
+            <tr><th>Field</th><th>Value to enter</th></tr>
+            <tr><td>Agent Name</td><td class="fv">Morning Briefing</td></tr>
+            <tr><td>Description</td><td class="fv">Delivers a structured daily brief summarizing yesterday's meetings, open action items, and today's priorities using Outlook and Teams data.</td></tr>
+
+          </table>
+          <div class="copy-block">
+            <div class="cbh">
+              <span>System Prompt — paste into Agent Instructions</span>
+              <button class="copy-btn" onclick="copyBlock(this,'mb-prompt')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>
+            </div>
+            <pre id="mb-prompt">You are a Morning Briefing assistant for sales professionals. Every morning, your job is to synthesize yesterday's activity into a clean, structured daily brief that gets the user oriented and focused fast.
+
+Your output should follow this structure:
+
+---
+📋 MORNING BRIEFING — [Today's Date]
+---
+
+1. YESTERDAY IN REVIEW
+   - Meetings held: list each with a 1-2 sentence summary of what was discussed and any decisions made
+   - Key emails sent/received: flag any that require follow-up
+   - Teams conversations worth noting: any decisions, commitments, or unresolved threads
+
+2. OPEN ACTION ITEMS
+   - List every commitment made by the user or to the user that is unresolved
+   - For each: what it is, who it involves, and when it was promised by
+   - Flag any that are overdue
+
+3. TODAY'S AGENDA
+   - Upcoming meetings with who, what time, and a one-line context note
+   - Deadlines or deliverables due today
+   - Recommended first action to take this morning
+
+4. ON YOUR RADAR
+   - Any patterns or signals worth noting (a dealer who keeps rescheduling, an open thread going cold, a follow-up window closing)
+   - 1–2 proactive nudges based on what you see
+
+Keep the whole brief scannable. Use short bullets. No filler. The user should be able to read this in under 2 minutes.
+
+If meeting transcripts or notes are available, incorporate them. If not, use email and calendar context to infer what likely happened.</pre>
+          </div>
+        </div>
+
+        <div class="section-label">Knowledge Sources &amp; Capabilities</div>
+        <div class="two-col">
+          <div class="knowledge-grid">
+            <div class="ki"><span class="ki-icon">📅</span><div><div class="ki-name">Outlook Calendar</div><div class="ki-desc">Yesterday's meetings and today's agenda</div><span class="ki-req">Required</span></div></div>
+            <div class="ki"><span class="ki-icon">📧</span><div><div class="ki-name">Outlook Email</div><div class="ki-desc">Yesterday's sent and received messages</div><span class="ki-req">Required</span></div></div>
+            <div class="ki"><span class="ki-icon">💬</span><div><div class="ki-name">Teams Messages</div><div class="ki-desc">Chats, channel activity, and @mentions from yesterday</div><span class="ki-req">Required</span></div></div>
+            <div class="ki"><span class="ki-icon">🎙️</span><div><div class="ki-name">Teams Transcripts</div><div class="ki-desc">Auto-generated call notes if transcription was enabled</div><span class="ki-opt">Recommended</span></div></div>
+            <div class="ki"><span class="ki-icon">📁</span><div><div class="ki-name">SharePoint / OneDrive</div><div class="ki-desc">Files shared or edited yesterday for context</div><span class="ki-opt">Optional</span></div></div>
+          </div>
+          <div>
+            <div class="cap-sublabel">Capabilities to enable</div>
+            <div class="cap-list">
+              <div class="cap-item"><span class="cap-dot"></span>Read Outlook calendar</div>
+              <div class="cap-item"><span class="cap-dot"></span>Read Outlook email</div>
+              <div class="cap-item"><span class="cap-dot"></span>Read Teams messages &amp; channels</div>
+              <div class="cap-item"><span class="cap-dot"></span>Read Teams meeting transcripts</div>
+              <div class="cap-item"><span class="cap-dot"></span>Microsoft Graph Search</div>
+              <div class="cap-item"><span class="cap-dot"></span>Read SharePoint files</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Suggested prompts</div>
+        <div class="prompts-grid">
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">Full briefing</span>Give me my full morning briefing — recap yesterday, surface any open action items, and show me what's on my calendar today.</div><button class="prompt-copy" onclick="copyPrompt(this,`Give me my full morning briefing — recap yesterday, surface any open action items, and show me what's on my calendar today.`)">Copy prompt</button></div>
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">Action items only</span>Just show me open action items from the last 48 hours. What did I commit to and what was committed to me that's still outstanding?</div><button class="prompt-copy" onclick="copyPrompt(this,`Just show me open action items from the last 48 hours. What did I commit to and what was committed to me that's still outstanding?`)">Copy prompt</button></div>
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">Meeting recap</span>Summarize my meetings from yesterday. For each one, what was discussed, what was decided, and are there any follow-ups I need to handle?</div><button class="prompt-copy" onclick="copyPrompt(this,'Summarize my meetings from yesterday. For each one, what was discussed, what was decided, and are there any follow-ups I need to handle?')">Copy prompt</button></div>
+          <div class="prompt-card"><div class="pc-text"><span class="pc-label">Monday reset</span>It's Monday — give me a catch-up on everything from last Friday that I need to close out before I start anything new this week.</div><button class="prompt-copy" onclick="copyPrompt(this,`It's Monday — give me a catch-up on everything from last Friday that I need to close out before I start anything new this week.`)">Copy prompt</button></div>
+        </div>
+
+        <div class="tips-box">
+          <h4>💡 Pro Tips</h4>
+          <ul>
+            <li>Enable Teams meeting transcription on your calls — this agent's recaps are 10x richer when transcript data is available.</li>
+            <li>Pin this agent in Teams so you can trigger it in under 5 seconds from your phone each morning.</li>
+            <li>On Mondays, change the time window: "Recap everything from Friday" so you don't miss weekend email activity.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content-area -->
+</div><!-- /app -->
+
+<script>
+function showAgent(id) {
+  document.querySelectorAll('.agent-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => {
+    b.classList.remove('active');
+    b.style.borderLeftColor = '';
+  });
+  document.getElementById('panel-' + id).classList.add('active');
+  const btn = document.getElementById('nav-' + id);
+  btn.classList.add('active');
+  if (id === 'start') btn.style.borderLeftColor = 'var(--accent-purple)';
+  document.querySelector('.content-area').scrollTo({ top: 0, behavior: 'smooth' });
+}
+function copyBlock(btn, id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied`;
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy`; }, 2200);
+  });
+}
+function copyPrompt(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.innerText = '✓ Copied';
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerText = 'Copy prompt'; }, 2200);
+  });
+}
+</script>
+</body>
+</html>
