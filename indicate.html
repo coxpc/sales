@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Indicators & Lifestyle Insights | PC Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --trust-blue: #1D3E74;
+    --power-blue: #0C80DF;
+    --impact-orange: #FF8210;
+    --energy-aqua: #00BCDD;
+    --navy: #0C1F3F;
+    --navy-mid: #132b52;
+    --surface: #0f1e38;
+    --surface-2: #162440;
+    --surface-3: #1c2e50;
+    --border: rgba(0,188,221,0.15);
+    --text-primary: #f0f4ff;
+    --text-secondary: #8fa8cc;
+    --adobe-red: #FF0000;
+    --adstra-teal: #00BCDD;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--navy);
+    color: var(--text-primary);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    border-bottom: 2px solid var(--power-blue);
+    padding: 28px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+    background: var(--power-blue);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: white;
+    letter-spacing: -1px;
+  }
+
+  .header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+  }
+
+  .header-subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .badge {
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--energy-aqua);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* MAIN */
+  .main {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 48px 48px 80px;
+  }
+
+  /* SECTION LABELS */
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--energy-aqua);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 680px;
+    line-height: 1.7;
+  }
+
+  /* HERO EXPLAINER */
+  .hero {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(12,128,223,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .hero-analogy {
+    background: var(--surface-3);
+    border-left: 3px solid var(--impact-orange);
+    border-radius: 0 12px 12px 0;
+    padding: 24px 28px;
+    margin-top: 24px;
+  }
+
+  .hero-analogy .analogy-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--impact-orange);
+    margin-bottom: 8px;
+  }
+
+  .hero-analogy p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* DATA FLOW DIAGRAM */
+  .flow-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .flow-node {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .flow-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 20px;
+  }
+
+  .flow-connector-line {
+    width: 2px;
+    flex: 1;
+    min-height: 20px;
+    background: linear-gradient(to bottom, var(--border), var(--border));
+  }
+
+  .flow-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .flow-content {
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    flex: 1;
+    margin-bottom: 4px;
+  }
+
+  .flow-content h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .flow-content p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .dot-adobe { background: rgba(255,0,0,0.15); border: 2px solid rgba(255,80,80,0.5); }
+  .dot-adstra { background: rgba(0,188,221,0.15); border: 2px solid rgba(0,188,221,0.5); }
+  .dot-coxdata { background: rgba(255,130,16,0.15); border: 2px solid rgba(255,130,16,0.5); }
+  .dot-vin { background: rgba(12,128,223,0.15); border: 2px solid rgba(12,128,223,0.5); }
+
+  /* TABS */
+  .tabs-container {
+    margin-bottom: 48px;
+  }
+
+  .tabs-nav {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+
+  .tab-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s ease;
+  }
+
+  .tab-btn:hover { color: var(--text-primary); }
+
+  .tab-btn.active {
+    color: var(--power-blue);
+    border-bottom-color: var(--power-blue);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* CARDS GRID */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .cards-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .card:hover {
+    border-color: rgba(12,128,223,0.4);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .card-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .tag-adobe { background: rgba(255,80,80,0.12); color: #ff6b6b; border: 1px solid rgba(255,80,80,0.25); }
+  .tag-adstra { background: rgba(0,188,221,0.12); color: var(--energy-aqua); border: 1px solid rgba(0,188,221,0.25); }
+  .tag-combined { background: rgba(12,128,223,0.12); color: #60b0ff; border: 1px solid rgba(12,128,223,0.25); }
+
+  /* INDICATOR TILES */
+  .indicators-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .indicator-tile {
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .indicator-tile:hover {
+    border-color: var(--power-blue);
+    background: rgba(12,128,223,0.08);
+  }
+
+  .indicator-tile.selected {
+    border-color: var(--power-blue);
+    background: rgba(12,128,223,0.12);
+  }
+
+  .tile-icon { font-size: 24px; margin-bottom: 10px; }
+
+  .tile-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .tile-source {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .source-adobe { color: #ff6b6b; }
+  .source-adstra { color: var(--energy-aqua); }
+
+  .tile-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-top: 8px;
+  }
+
+  /* DETAIL PANEL */
+  .detail-panel {
+    background: var(--surface-2);
+    border: 1px solid rgba(12,128,223,0.3);
+    border-radius: 12px;
+    padding: 32px;
+    margin-top: 24px;
+    display: none;
+  }
+
+  .detail-panel.visible { display: block; }
+
+  .detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .detail-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+
+  .detail-block {
+    background: var(--surface-3);
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+
+  .detail-block-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .detail-block-content {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  /* PITCH SECTION */
+  .pitch-block {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  .pitch-block h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .pitch-block .setup {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+
+  .pitch-quote {
+    background: var(--surface-3);
+    border-left: 3px solid var(--power-blue);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .pitch-note {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* TWO VENDORS */
+  .vendor-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .vendor-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .vendor-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .vendor-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-adobe { background: #FF0000; color: white; }
+  .logo-adstra { background: var(--energy-aqua); color: var(--navy); }
+
+  .vendor-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .vendor-role {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .vendor-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .vendor-list li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .vendor-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--power-blue);
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    display: flex;
+    gap: 0;
+    margin-bottom: 48px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .progress-step {
+    flex: 1;
+    padding: 16px 20px;
+    cursor: pointer;
+    border-right: 1px solid var(--border);
+    transition: background 0.2s ease;
+    text-align: center;
+  }
+
+  .progress-step:last-child { border-right: none; }
+
+  .progress-step:hover { background: var(--surface-3); }
+
+  .progress-step.active { background: rgba(12,128,223,0.12); }
+
+  .step-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--power-blue);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .step-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: rgba(255,130,16,0.08);
+    border: 1px solid rgba(255,130,16,0.25);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-top: 20px;
+  }
+
+  .highlight-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--impact-orange);
+    margin-bottom: 8px;
+  }
+
+  .highlight p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .indicators-grid { grid-template-columns: repeat(2, 1fr); }
+    .detail-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .header { padding: 16px 20px; }
+    .main { padding: 24px 20px; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .cards-grid-2 { grid-template-columns: 1fr; }
+    .vendor-compare { grid-template-columns: 1fr; }
+    .indicators-grid { grid-template-columns: 1fr 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .progress-bar { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="brand-mark">VS</div>
+    <div>
+      <div class="header-title">Customer Indicators &amp; Lifestyle Insights</div>
+      <div class="header-subtitle">VinSolutions · PC Internal Training</div>
+    </div>
+  </div>
+  <div class="badge">MSS Training Series</div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="section-label">What This Is</div>
+        <h1 class="section-title">Data That Arrives<br>Before the Customer Does</h1>
+        <p class="section-desc">Customer Indicators and Lifestyle Insights in VinSolutions are enrichment layers — external data signals layered onto a customer record to help dealers understand <em>who</em> a buyer is, <em>what</em> they care about, and <em>when</em> they're likely to act — before a single conversation happens.</p>
+        <div class="hero-analogy">
+          <div class="analogy-label">The Analogy</div>
+          <p>Think of the CRM record like a medical chart. Without enrichment, it only shows visit history. Customer Indicators and Lifestyle Insights add the equivalent of bloodwork and family history — context the doctor needs to make the right call, even on a first visit.</p>
+        </div>
+      </div>
+      <div class="flow-diagram">
+        <div class="flow-node">
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <div class="flow-dot dot-adobe">🔴</div>
+            <div style="width:2px;height:20px;background:var(--border);margin:4px 0;"></div>
+          </div>
+          <div class="flow-content">
+            <h4>Adobe Experience Cloud</h4>
+            <p>Collects behavioral signals — what shoppers browse, click, configure, and abandon across OEM and Cox digital properties.</p>
+          </div>
+        </div>
+        <div class="flow-node">
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <div class="flow-dot dot-adstra">💠</div>
+            <div style="width:2px;height:20px;background:var(--border);margin:4px 0;"></div>
+          </div>
+          <div class="flow-content">
+            <h4>Adstra Identity Graph</h4>
+            <p>Resolves who that shopper actually is — stitching device, email, household, and offline identity into one addressable profile.</p>
+          </div>
+        </div>
+        <div class="flow-node">
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <div class="flow-dot dot-coxdata">🟠</div>
+            <div style="width:2px;height:20px;background:var(--border);margin:4px 0;"></div>
+          </div>
+          <div class="flow-content">
+            <h4>Cox Data Enrichment</h4>
+            <p>Combines shopper behavior from Autotrader, KBB, and dealer.com with third-party lifestyle and financial data.</p>
+          </div>
+        </div>
+        <div class="flow-node">
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <div class="flow-dot dot-vin">🔵</div>
+          </div>
+          <div class="flow-content" style="border-color:rgba(12,128,223,0.4);">
+            <h4>VinSolutions CRM Record</h4>
+            <p>Customer Indicators and Lifestyle Insights surface inside the customer record — actionable signals for every dealer conversation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VENDOR SECTION -->
+  <div class="section-label">The Two Engines</div>
+  <h2 class="section-title" style="margin-bottom:32px;">Adobe + Adstra: Different Jobs, One Goal</h2>
+
+  <div class="vendor-compare">
+    <div class="vendor-card">
+      <div class="vendor-header">
+        <div class="vendor-logo logo-adobe">Ae</div>
+        <div>
+          <div class="vendor-name">Adobe Experience Cloud</div>
+          <div class="vendor-role">The Behavior Layer — <em>what did they do?</em></div>
+        </div>
+      </div>
+      <ul class="vendor-list">
+        <li>Tracks digital behavior across OEM sites, Autotrader, KBB, Dealer.com, and third-party publisher networks</li>
+        <li>Assigns each shopper an Experience Cloud Identifier (ECID) that persists across sessions and devices</li>
+        <li>Captures vehicle configurations, VDP views, trade-in tool usage, finance calculator interactions</li>
+        <li>Builds a real-time behavioral profile — what they looked at, how long, and what they didn't do next</li>
+        <li>Powers personalization: the dealer website can show inventory aligned to what a returning visitor already browsed</li>
+        <li>Operates within a clean room environment — data is activated without raw data being exposed</li>
+      </ul>
+    </div>
+    <div class="vendor-card">
+      <div class="vendor-header">
+        <div class="vendor-logo logo-adstra">Ad</div>
+        <div>
+          <div class="vendor-name">Adstra Conexa</div>
+          <div class="vendor-role">The Identity Layer — <em>who are they, really?</em></div>
+        </div>
+      </div>
+      <ul class="vendor-list">
+        <li>Resolves fragmented signals (device, email, cookie, household) into a single unified identity</li>
+        <li>Appends offline data: demographic, financial, lifestyle, and life-event attributes to the profile</li>
+        <li>Cox Automotive uses Adstra's Conexa platform specifically for consumer data strategy — confirmed partnership</li>
+        <li>Identifies anonymous web visitors as real, addressable consumers before they submit a lead</li>
+        <li>Links the same person across Autotrader, KBB, and VinSolutions — even if they never logged in</li>
+        <li>Delivers audience segments and Link Quality Scores so Cox knows how confident each match is</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- TABS: INDICATORS -->
+  <div class="tabs-container">
+    <div class="section-label">What Shows Up in VinSolutions</div>
+    <h2 class="section-title" style="margin-bottom:8px;">Customer Indicators &amp; Lifestyle Insights</h2>
+    <p class="section-desc" style="margin-bottom:32px;">These are the actual data points PCs should be able to explain to dealers — what each one means, where it comes from, and how to use it in a sales conversation.</p>
+
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('indicators')">Customer Indicators</button>
+      <button class="tab-btn" onclick="switchTab('lifestyle')">Lifestyle Insights</button>
+      <button class="tab-btn" onclick="switchTab('howto')">How to Use It</button>
+      <button class="tab-btn" onclick="switchTab('pitch')">Talking to Dealers</button>
+    </div>
+
+    <!-- TAB: INDICATORS -->
+    <div id="tab-indicators" class="tab-panel active">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:24px;">Click any tile for a deeper explanation.</p>
+      <div class="indicators-grid" id="indicator-tiles">
+
+        <div class="indicator-tile" onclick="showDetail('in-market')">
+          <div class="tile-icon">📈</div>
+          <div class="tile-name">In-Market Score</div>
+          <div class="tile-source source-adobe">Adobe + Cox Signals</div>
+          <div class="tile-desc">Predictive score estimating how likely a customer is to purchase within the next 90 days.</div>
+        </div>
+
+        <div class="indicator-tile" onclick="showDetail('equity')">
+          <div class="tile-icon">💰</div>
+          <div class="tile-name">Equity Position</div>
+          <div class="tile-source source-adstra">Cox + Adstra</div>
+          <div class="tile-desc">Estimated positive or negative equity based on current vehicle, payoff, and market value.</div>
+        </div>
+
+        <div class="indicator-tile" onclick="showDetail('lease-end')">
+          <div class="tile-icon">📅</div>
+          <div class="tile-name">Lease / Loan End</div>
+          <div class="tile-source source-adstra">Adstra Identity Data</div>
+          <div class="tile-desc">Estimated lease or loan maturity date — a proven trigger for proactive outreach.</div>
+        </div>
+
+        <div class="indicator-tile" onclick="showDetail('service-due')">
+          <div class="tile-icon">🔧</div>
+          <div class="tile-name">Service Due Indicator</div>
+          <div class="tile-source source-adobe">Cox CRM + Xtime</div>
+          <div class="tile-desc">Flags when a customer is overdue for service — a natural bridge into a sales conversation.</div>
+        </div>
+
+        <div class="indicator-tile" onclick="showDetail('life-event')">
+          <div class="tile-icon">🏠</div>
+          <div class="tile-name">Life Event Triggers</div>
+          <div class="tile-source source-adstra">Adstra Offline Data</div>
+          <div class="tile-desc">Signals like new home purchase, new baby, job change — events that correlate with vehicle needs.</div>
+        </div>
+
+        <div class="indicator-tile" onclick="showDetail('repeat')">
+          <div class="tile-icon">🔄</div>
+          <div class="tile-name">Repeat Buyer Indicator</div>
+          <div class="tile-source source-adobe">Cox Transaction History</div>
+          <div class="tile-desc">Identifies customers who have purchased from the group before — even at a different rooftop.</div>
+        </div>
+
+        <div class="indicator-tile" onclick="showDetail('conquest')">
+          <div class="tile-icon">🎯</div>
+          <div class="tile-name">Conquest Flag</div>
+          <div class="tile-source source-adstra">Adstra Audience Segment</div>
+          <div class="tile-desc">Marks prospects who own a competitive brand — sourced from Adstra's audience taxonomy.</div>
+        </div>
+
+        <div class="indicator-tile" onclick="showDetail('credit')">
+          <div class="tile-icon">📊</div>
+          <div class="tile-name">Credit Tier Estimate</div>
+          <div class="tile-source source-adstra">Adstra Financial Data</div>
+          <div class="tile-desc">A modeled credit tier (not a hard pull) to help structure the right conversation upfront.</div>
+        </div>
+
+      </div>
+
+      <!-- DETAIL PANEL -->
+      <div class="detail-panel" id="detail-panel">
+        <div class="detail-header">
+          <div>
+            <div id="detail-tag" class="card-tag tag-combined" style="margin-bottom:8px;"></div>
+            <div class="detail-title" id="detail-title"></div>
+          </div>
+          <button onclick="closeDetail()" style="background:var(--surface-3);border:1px solid var(--border);color:var(--text-secondary);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;">✕ Close</button>
+        </div>
+        <div class="detail-grid" id="detail-grid"></div>
+      </div>
+    </div>
+
+    <!-- TAB: LIFESTYLE -->
+    <div id="tab-lifestyle" class="tab-panel">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:28px;">Lifestyle Insights come primarily from Adstra's offline data enrichment — demographic and psychographic attributes appended to known customer records.</p>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-tag tag-adstra">Adstra</div>
+          <div class="card-icon">🏕️</div>
+          <div class="card-title">Outdoor &amp; Adventure</div>
+          <div class="card-desc">Customers modeled as outdoor enthusiasts — camping, hiking, off-roading. Relevant for truck and SUV conversations. Helps align inventory to interest before they say a word.</div>
+        </div>
+        <div class="card">
+          <div class="card-tag tag-adstra">Adstra</div>
+          <div class="card-icon">👨‍👩‍👧‍👦</div>
+          <div class="card-title">Family &amp; Household Profile</div>
+          <div class="card-desc">Household size, presence of children, estimated income tier. Shapes the right vehicle class and F&amp;I conversation. A household with three kids doesn't need a two-door sports car pitched first.</div>
+        </div>
+        <div class="card">
+          <div class="card-tag tag-adstra">Adstra</div>
+          <div class="card-icon">💼</div>
+          <div class="card-title">Business Owner / Self-Employed</div>
+          <div class="card-desc">Indicates potential commercial or fleet need. Opens the door to Section 179 tax conversations and multi-unit opportunities.</div>
+        </div>
+        <div class="card">
+          <div class="card-tag tag-adobe">Adobe</div>
+          <div class="card-icon">💻</div>
+          <div class="card-title">Tech Affinity</div>
+          <div class="card-desc">Derived from digital behavior patterns — early adopters, high tech-product engagement. Useful when positioning EV, connected-car features, or digital retailing tools.</div>
+        </div>
+        <div class="card">
+          <div class="card-tag tag-adstra">Adstra</div>
+          <div class="card-icon">🌾</div>
+          <div class="card-title">Rural / Ag Lifestyle</div>
+          <div class="card-desc">Identifies customers in agricultural or rural contexts — towing capacity, payload, and work-truck features rise in relevance immediately.</div>
+        </div>
+        <div class="card">
+          <div class="card-tag tag-combined">Combined</div>
+          <div class="card-icon">🏎️</div>
+          <div class="card-title">Enthusiast / Performance</div>
+          <div class="card-desc">Blends browsing behavior (performance trim VDPs) with Adstra's hobby data. Customers who care deeply about the drive — not just the deal.</div>
+        </div>
+      </div>
+      <div class="highlight" style="margin-top:28px;">
+        <div class="highlight-label">PC Coaching Note</div>
+        <p>Lifestyle Insights don't tell dealers <em>what to sell</em> — they tell dealers <em>what conversation to start</em>. The goal is to walk into a customer interaction already knowing what matters to them, so the salesperson leads with relevance instead of guessing. That's the shift from reactive to proactive retail.</p>
+      </div>
+    </div>
+
+    <!-- TAB: HOW TO USE -->
+    <div id="tab-howto" class="tab-panel">
+      <div class="progress-bar">
+        <div class="progress-step active">
+          <div class="step-num">01</div>
+          <div class="step-label">Open the Record</div>
+        </div>
+        <div class="progress-step">
+          <div class="step-num">02</div>
+          <div class="step-label">Read the Indicators</div>
+        </div>
+        <div class="progress-step">
+          <div class="step-num">03</div>
+          <div class="step-label">Check Lifestyle Data</div>
+        </div>
+        <div class="progress-step">
+          <div class="step-num">04</div>
+          <div class="step-label">Build the Story</div>
+        </div>
+        <div class="progress-step">
+          <div class="step-num">05</div>
+          <div class="step-label">Make the Call</div>
+        </div>
+      </div>
+
+      <div class="cards-grid-2">
+        <div class="card">
+          <div class="card-title">📂 Where to Find It</div>
+          <div class="card-desc" style="margin-top:8px;">Customer Indicators appear on the customer record in VinSolutions — typically in the Intelligence or Insights panel on the contact detail view. Lifestyle data appears in the enrichment section below core contact fields. Not all records will have all indicators — data availability depends on identity match quality from Adstra.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">🎯 Who to Prioritize</div>
+          <div class="card-desc" style="margin-top:8px;">Sort your customer base by In-Market Score descending. Layer in Lease/Loan End to find customers with both urgency and a natural exit point. Add Equity Position to qualify which conversations are clean pulls versus potential challenges. This stack-ranking is your proactive outreach list.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">💬 What to Say</div>
+          <div class="card-desc" style="margin-top:8px;">Don't reference the data directly — "I see your lease ends in 90 days" sounds surveillance-like. Instead, use it to <em>frame</em> the conversation: "We're reaching out to customers whose vehicles are around that 3-year mark — a lot of them are finding this a great time to explore their options." The insight drives the timing; the conversation stays human.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚠️ Common Misuses</div>
+          <div class="card-desc" style="margin-top:8px;">Don't treat Credit Tier Estimate as a hard pull — it's a model, not a bureau score. Don't skip the conversation because the In-Market Score is low — scores are probabilities, not verdicts. Don't ignore Lifestyle data just because it's not a "trigger" — it shapes the right product and pitch before the customer even arrives.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: PITCH -->
+    <div id="tab-pitch" class="tab-panel">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:28px;">Scripts and setups for explaining Customer Indicators and Lifestyle Insights to dealer principals and sales managers.</p>
+
+      <div class="pitch-block">
+        <h3>🧩 The Setup — What Problem Does This Solve?</h3>
+        <div class="setup">Use this framing before introducing the feature.</div>
+        <div class="pitch-quote">"Most dealerships are reactive. A customer walks in or submits a lead, and then you react. What Customer Indicators do is flip that model. Instead of waiting for the customer to raise their hand, you already know who's likely in-market, what they care about, and when their situation is about to change. That's the difference between a team that calls 200 random customers a week and a team that calls the 30 right ones."</div>
+      </div>
+
+      <div class="pitch-block">
+        <h3>🔌 Explaining the Data Sources</h3>
+        <div class="setup">When a dealer asks "where does this data come from?"</div>
+        <div class="pitch-quote">"Two places. One is behavioral — what your customers are actually doing online. Are they browsing Autotrader? Configuring on the OEM site? Visiting competitor VDPs? That's Adobe tracking anonymous intent signals and tying them back to known customers. The second layer is identity data — demographic, financial, and lifestyle attributes from a data company called Adstra. Cox actually uses their platform specifically for this enrichment. So when you open a customer record and see a credit tier estimate or a life event flag, that's real third-party data that's been matched to that customer."</div>
+      </div>
+
+      <div class="pitch-block">
+        <h3>💡 The Lifestyle Insights Pitch</h3>
+        <div class="setup">When showing the Lifestyle section of the record for the first time.</div>
+        <div class="pitch-quote">"This is what I want you to think about — before your salesperson picks up the phone, they should know something about who they're calling. If I told you this customer has three kids, lives in a rural zip, and shows an outdoor lifestyle flag, you're pitching a different vehicle than if I told you they're a business owner with a tech affinity. Lifestyle Insights let your team walk into every conversation with context. That's not magic — that's data doing its job."</div>
+        <div class="pitch-note">💡 Tip: Pull up an actual customer record during this conversation. Live data always lands harder than slides.</div>
+      </div>
+
+      <div class="pitch-block">
+        <h3>🛡️ Handling the "I Don't Trust the Data" Objection</h3>
+        <div class="setup">Common pushback from skeptical GMs or sales managers.</div>
+        <div class="pitch-quote">"That's fair — and I'll be direct with you. The data isn't perfect. Credit tier is modeled, not a bureau pull. In-market scores are probabilities. What they're not is noise — they're signals that help your team prioritize. You don't have to trust every data point to benefit from it. If the In-Market Score helps your BDC call the right 40 customers instead of 400 random ones, it's already earning its keep. Use it as a starting point, not a verdict."</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+  function switchTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  const detailData = {
+    'in-market': {
+      title: 'In-Market Score',
+      tag: 'Adobe + Cox Signals',
+      tagClass: 'tag-combined',
+      what: 'A predictive score (typically 1–100) estimating how likely a specific customer is to purchase a vehicle within 90 days.',
+      source: 'Driven by Adobe behavioral signals — VDP views, configure tool use, finance calculator interaction, return visit frequency across Autotrader, KBB, and the dealer\'s own site.',
+      useIt: 'Sort your active customer list by In-Market Score and prioritize outreach from the top down. Pair with Equity and Lease/Loan End for the strongest candidates.'
+    },
+    'equity': {
+      title: 'Equity Position',
+      tag: 'Cox + Adstra',
+      tagClass: 'tag-combined',
+      what: 'An estimate of positive or negative equity based on the customer\'s current vehicle, estimated payoff balance, and current market value from Black Book or similar source.',
+      source: 'Combines Cox transaction records with Adstra\'s financial data enrichment and current market valuation models.',
+      useIt: 'Positive equity = clean trade conversation. Negative equity = F&I needs to structure creatively. Knowing this upfront prevents a deal from falling apart at the desk.'
+    },
+    'lease-end': {
+      title: 'Lease / Loan End',
+      tag: 'Adstra Identity Data',
+      tagClass: 'tag-adstra',
+      what: 'Estimated date when a customer\'s lease expires or auto loan reaches maturity — typically derived from Adstra\'s financial attribute data.',
+      source: 'Adstra appends estimated contract end dates based on known origination data and standard term modeling.',
+      useIt: 'Build a saved filter for customers within 90–120 days of lease/loan end. This is your highest-intent outreach list. Lead with "exploring options before your current term ends" framing.'
+    },
+    'service-due': {
+      title: 'Service Due Indicator',
+      tag: 'Cox CRM + Xtime',
+      tagClass: 'tag-combined',
+      what: 'A flag that appears when a customer is past due or approaching their recommended service interval based on last RO date and mileage estimates.',
+      source: 'Pulled from Xtime service records and VinSolutions CRM history. One of the few indicators sourced entirely from first-party Cox data.',
+      useIt: 'Service is the best kept secret in sales. Customers in for service are already at the dealership. A service-due indicator surfaced in the CRM lets the sales team proactively reach out before the appointment — or at write-up.'
+    },
+    'life-event': {
+      title: 'Life Event Triggers',
+      tag: 'Adstra Offline Data',
+      tagClass: 'tag-adstra',
+      what: 'Signals indicating major life changes — new home purchase, new child, job change, relocation, marriage — that correlate strongly with vehicle purchase intent.',
+      source: 'Adstra aggregates this from public records, financial filings, and partner data networks. Appended to the customer profile via the Conexa identity graph.',
+      useIt: 'A new home in a suburban zip code often means a second vehicle need. A new baby often means trading up in utility. Life events don\'t guarantee a purchase — they open the door to a relevant conversation.'
+    },
+    'repeat': {
+      title: 'Repeat Buyer Indicator',
+      tag: 'Cox Transaction History',
+      tagClass: 'tag-combined',
+      what: 'Identifies customers who have a prior purchase history with the dealer group — including transactions at other rooftops under the same ownership.',
+      source: 'Sourced from VinSolutions transaction records across connected dealerships. One of the most reliable first-party signals in the system.',
+      useIt: 'Treat repeat buyers as your highest-trust segment. They already chose you once. The conversation starts from a different place — acknowledgment of that history matters more than any pitch.'
+    },
+    'conquest': {
+      title: 'Conquest Flag',
+      tag: 'Adstra Audience Segment',
+      tagClass: 'tag-adstra',
+      what: 'Marks a customer or prospect who currently owns or recently purchased a competitive brand — indicating an opportunity to switch them to your brand.',
+      source: 'Derived from Adstra\'s vehicle ownership data within their syndicated audience taxonomy. Can be layered with In-Market Score for conquest targeting.',
+      useIt: 'Don\'t lead with conquest framing — it feels adversarial. Instead, use it to prepare: know which features differentiate your brand from what they currently drive, so you\'re telling a relevant story.'
+    },
+    'credit': {
+      title: 'Credit Tier Estimate',
+      tag: 'Adstra Financial Data',
+      tagClass: 'tag-adstra',
+      what: 'A modeled credit bracket (e.g., Tier 1 / Prime, Tier 2 / Near Prime) based on financial behavior signals — not a hard credit bureau pull.',
+      source: 'Adstra appends financial attribute data including estimated credit tier from their offline enrichment layer.',
+      useIt: 'Use this to pre-structure the conversation, not to pre-qualify someone out. A Tier 1 customer should hear different options than a Tier 3. Helps F&I and sales align before the customer sits down.'
+    }
+  };
+
+  function showDetail(key) {
+    const d = detailData[key];
+    document.querySelectorAll('.indicator-tile').forEach(t => t.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+
+    document.getElementById('detail-title').textContent = d.title;
+    const tag = document.getElementById('detail-tag');
+    tag.textContent = d.tag;
+    tag.className = 'card-tag ' + d.tagClass;
+
+    document.getElementById('detail-grid').innerHTML = `
+      <div class="detail-block">
+        <div class="detail-block-label">What It Is</div>
+        <div class="detail-block-content">${d.what}</div>
+      </div>
+      <div class="detail-block">
+        <div class="detail-block-label">Where It Comes From</div>
+        <div class="detail-block-content">${d.source}</div>
+      </div>
+      <div class="detail-block">
+        <div class="detail-block-label">How to Use It</div>
+        <div class="detail-block-content">${d.useIt}</div>
+      </div>
+    `;
+
+    const panel = document.getElementById('detail-panel');
+    panel.classList.add('visible');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function closeDetail() {
+    document.getElementById('detail-panel').classList.remove('visible');
+    document.querySelectorAll('.indicator-tile').forEach(t => t.classList.remove('selected'));
+  }
+</script>
+</body>
+</html>
