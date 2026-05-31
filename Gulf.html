@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KC Diamonds — Orange Beach Trip Guide · July 17–26</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b24;
+    --bg3: #1e2530;
+    --card: #1e2530;
+    --border: #2a3344;
+    --text: #e8edf5;
+    --muted: #7a8aa0;
+    --gold: #f0b429;
+    --gold2: #ffd166;
+    --teal: #38bdf8;
+    --coral: #fb7185;
+    --green: #4ade80;
+    --purple: #a78bfa;
+  }
+  [data-theme="light"] {
+    --bg: #f5f7fa;
+    --bg2: #ebeef3;
+    --bg3: #dde2ea;
+    --card: #ffffff;
+    --border: #c8d0dc;
+    --text: #1a2030;
+    --muted: #6b7a90;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #0d1117 0%, #1a2540 50%, #0d1117 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 28px 24px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  [data-theme="light"] .header { background: linear-gradient(135deg, #1a2540 0%, #243060 50%, #1a2540 100%); }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(240,180,41,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .header-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    position: relative;
+  }
+  .logo-mark {
+    flex-shrink: 0;
+    width: 58px; height: 58px;
+    background: var(--gold);
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width: 30px; height: 30px; }
+  .header-text { flex: 1; }
+  .team-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 7vw, 42px);
+    letter-spacing: 3px;
+    color: #fff;
+    line-height: 1;
+  }
+  .trip-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 4px;
+  }
+  .theme-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 14px;
+    color: #fff;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .theme-btn:hover { background: rgba(255,255,255,0.18); }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 780px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* ── SECTION HEADERS ── */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 32px 0 14px;
+  }
+  .section-label .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .section-label h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--text);
+  }
+  .section-label .line {
+    flex: 1; height: 1px;
+    background: var(--border);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .card:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .card-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .card-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .card-badge {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .badge-free { background: rgba(74,222,128,0.15); color: var(--green); border: 1px solid rgba(74,222,128,0.3); }
+  .badge-budget { background: rgba(56,189,248,0.15); color: var(--teal); border: 1px solid rgba(56,189,248,0.3); }
+  .badge-splurge { background: rgba(251,113,133,0.15); color: var(--coral); border: 1px solid rgba(251,113,133,0.3); }
+  .badge-tip { background: rgba(240,180,41,0.15); color: var(--gold); border: 1px solid rgba(240,180,41,0.3); }
+  .badge-urgent { background: rgba(251,113,133,0.2); color: var(--coral); border: 1px solid rgba(251,113,133,0.4); }
+  .card-body {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.65;
+    padding-left: 32px;
+  }
+  .card-body strong { color: var(--text); }
+  .card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+    padding-left: 32px;
+  }
+  .meta-pill {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: var(--bg2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .meta-pill a { color: inherit; text-decoration: none; display: flex; align-items: center; gap: 3px; }
+  .meta-pill a:hover { color: var(--gold); }
+  .meta-pill:has(a) { border-color: rgba(240,180,41,0.25); cursor: pointer; }
+
+  /* ── ALERT CARD ── */
+  .alert-card {
+    background: linear-gradient(135deg, rgba(251,113,133,0.1) 0%, rgba(251,113,133,0.05) 100%);
+    border: 1px solid rgba(251,113,133,0.35);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 10px;
+  }
+  .alert-card .card-body { color: var(--text); }
+
+  /* ── QUICK REF ── */
+  .quick-ref {
+    background: linear-gradient(135deg, rgba(240,180,41,0.08) 0%, rgba(240,180,41,0.03) 100%);
+    border: 1px solid rgba(240,180,41,0.25);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 10px;
+  }
+  .quick-ref h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .qr-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  @media (max-width: 480px) { .qr-grid { grid-template-columns: 1fr; } }
+  .qr-item { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+  .qr-item strong { color: var(--text); display: block; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+  /* ── DATES BANNER ── */
+  .dates-banner {
+    background: linear-gradient(90deg, rgba(240,180,41,0.12), rgba(240,180,41,0.06));
+    border: 1px solid rgba(240,180,41,0.3);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .dates-banner .icon { font-size: 22px; }
+  .dates-banner .text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .dates-banner .text strong { color: var(--gold); font-size: 14px; }
+
+  /* ── VENUE GRID ── */
+  .venue-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  @media (max-width: 500px) { .venue-grid { grid-template-columns: 1fr; } }
+  .venue-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 15px;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .venue-card:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .venue-name {
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--text);
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+  .venue-addr {
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .venue-map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--gold);
+    text-decoration: none;
+    border: 1px solid rgba(240,180,41,0.3);
+    border-radius: 20px;
+    padding: 3px 10px;
+    transition: background 0.2s;
+  }
+  .venue-map-link:hover { background: rgba(240,180,41,0.1); }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--border);
+  }
+</style>
+</head>
+<body data-theme="dark">
+
+<header class="header">
+  <div class="header-inner">
+<img src="data:image/png;base64,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" alt="KC Diamonds" style="height:68px;width:auto;flex-shrink:0;">
+    <div class="header-text">
+      <div class="team-name">KC Diamonds</div>
+      <div class="trip-label">Orange Beach, AL · Tournament Trip Guide</div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">☀︎ / ☾</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Dates Banner -->
+  <div class="dates-banner">
+    <div class="icon">🏖️</div>
+    <div class="text">
+      <strong>July 17 – 26, 2025</strong><br>
+      Orange Beach, Alabama · 14U Jr KC Diamonds
+    </div>
+  </div>
+
+  <!-- TOURNAMENT VENUES -->
+  <div class="section-label">
+    <div class="dot" style="background:var(--gold)"></div>
+    <h2>Tournament Venues</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="venue-grid">
+    <div class="venue-card">
+      <div class="venue-name">⚾ Foley Sports Complex</div>
+      <div class="venue-addr">998 W. Section Ave<br>Foley, AL 36535</div>
+      <a class="venue-map-link" href="https://maps.apple.com/?address=998+W+Section+Ave,+Foley,+AL+36535" target="_blank">📍 Open in Maps</a>
+    </div>
+    <div class="venue-card">
+      <div class="venue-name">⚾ Barnwell Sports Complex</div>
+      <div class="venue-addr">US-98 ALT<br>Fairhope, AL 36532</div>
+      <a class="venue-map-link" href="https://maps.apple.com/?address=US-98+ALT,+Fairhope,+AL+36532" target="_blank">📍 Open in Maps</a>
+    </div>
+    <div class="venue-card">
+      <div class="venue-name">⚾ Gulf Shores Sportsplex</div>
+      <div class="venue-addr">19025 County Road 6 West<br>Gulf Shores, AL 36542</div>
+      <a class="venue-map-link" href="https://maps.apple.com/?address=19025+County+Road+6+West,+Gulf+Shores,+AL+36542" target="_blank">📍 Open in Maps</a>
+    </div>
+    <div class="venue-card">
+      <div class="venue-name">⚾ Orange Beach Softball Complex</div>
+      <div class="venue-addr">4385 Williams Silvers Pkwy<br>Orange Beach, AL 36561</div>
+      <a class="venue-map-link" href="https://maps.apple.com/?address=4385+Williams+Silvers+Pkwy,+Orange+Beach,+AL+36561" target="_blank">📍 Open in Maps</a>
+    </div>
+  </div>
+
+  <!-- BEACH & FREE -->
+  <div class="section-label">
+    <div class="dot" style="background:var(--green)"></div>
+    <h2>Free &amp; Always Available</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🏝️</div>
+      <div class="card-title">The Beach — Public Access Points</div>
+      <span class="card-badge badge-free">Free</span>
+    </div>
+    <div class="card-body">
+      The anchor of every off-day. The sugar-white sand is made of pure quartz crystal and actually squeaks underfoot — the girls will love it. Early mornings before game time are perfect for a team walk, shell hunt, or just decompressing together on the water.
+      <br><br>
+      <strong>Best public access spots:</strong> Gulf Place, Cotton Bayou, Alabama Point East.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill">🐚 Shell hunting</span>
+      <span class="meta-pill">🏰 Sandcastle contests</span>
+      <span class="meta-pill">🌅 Pre-game walks</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🚲</div>
+      <div class="card-title">Gulf State Park — Free Bike Share</div>
+      <span class="card-badge badge-free">Free</span>
+    </div>
+    <div class="card-body">
+      Gulf State Park has a free bike share app — download it and ride up to 3 hours at no charge across 28 miles of trails. Ideal rest-day activity where families can go at their own pace. Keep an eye out for ospreys and alligators in their natural habitat.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://apps.apple.com/us/app/bloom-share-bikes-evs-more/id6736392137" target="_blank">📱 Download Bloom App</a></span>
+      <span class="meta-pill">⏱ Up to 3 hrs free</span>
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=20115+State+Hwy+135,+Gulf+Shores,+AL+36542&q=Gulf+State+Park" target="_blank">📍 Gulf State Park</a></span><span class="meta-pill">🦎 Wildlife sightings</span>
+    </div>
+  </div>
+
+  <!-- BUDGET FUN -->
+  <div class="section-label">
+    <div class="dot" style="background:var(--teal)"></div>
+    <h2>Low-Cost Group Wins</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">⛳</div>
+      <div class="card-title">Glow-in-the-Dark Mini Golf — Jurassic Golf</div>
+      <span class="card-badge badge-budget">~$12–15</span>
+    </div>
+    <div class="card-body">
+      The best team-bonding evening option on the trip. Jurassic Golf near Target does 5,000 sq ft of glow-in-the-dark mini golf — perfect after a game day when you want fun without tiring the girls out. Other courses in the area include Pirate's Island Adventure Golf and Adventure Island for variety.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill">🌙 Evening activity</span>
+      <span class="meta-pill">👾 Post-game option</span>
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=Gulf+Shores,+AL&q=Jurassic+Golf+Gulf+Shores" target="_blank">📍 Gulf Shores</a></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🎡</div>
+      <div class="card-title">The Wharf — Free Events + Ferris Wheel</div>
+      <span class="card-badge badge-budget">Free–$10</span>
+    </div>
+    <div class="card-body">
+      Your go-to "team dinner + hang" hub. The Wharf runs free outdoor concerts, family movie nights, and live music all summer with no cover charge. Add a ride on the Wharf Ferris Wheel for sweeping views of the marina. Easy for a big group — everyone can do their own thing in the same space.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill">🎵 Live music nightly</span>
+      <span class="meta-pill"><a href="https://www.alwharf.com/events/" target="_blank">🎆 Wharf Events Schedule</a></span>
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=4851+Wharf+Pkwy,+Orange+Beach,+AL+36561&q=The+Wharf+Orange+Beach" target="_blank">📍 The Wharf</a></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🌊</div>
+      <div class="card-title">The Hangout — Gulf Shores</div>
+      <span class="card-badge badge-budget">Casual $$</span>
+    </div>
+    <div class="card-body">
+      A Gulf Shores institution right on the main public beach. Foam machine, table dancing, vintage décor, and a menu of seasonal seafood. Loud, fun, and very much 14U energy. A perfect team dinner destination on a game night when the girls need to celebrate (or shake off a tough loss).
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill">🫧 Foam machine</span>
+      <span class="meta-pill">🎶 Live entertainment</span>
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=101+E+Beach+Blvd,+Gulf+Shores,+AL+36542&q=The+Hangout+Gulf+Shores" target="_blank">📍 101 E Beach Blvd</a></span>
+    </div>
+  </div>
+
+  <!-- SPLURGE -->
+  <div class="section-label">
+    <div class="dot" style="background:var(--coral)"></div>
+    <h2>Worth the Splurge</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">💦</div>
+      <div class="card-title">Waterville USA — Water &amp; Amusement Park</div>
+      <span class="card-badge badge-splurge">~$35–45</span>
+    </div>
+    <div class="card-body">
+      About 15 minutes from Orange Beach, Waterville combines a full waterpark and amusement park: waterslides, wave pools, and lazy river. Save this for a mid-tournament rest day when the girls need to blow off steam. It's the perfect pressure release valve without anything competitive attached.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=906+Gulf+Shores+Pkwy,+Gulf+Shores,+AL+36542&q=Waterville+USA" target="_blank">📍 906 Gulf Shores Pkwy</a></span>
+      <span class="meta-pill"><a href="https://www.watervilleusa.com" target="_blank">🔗 Waterville USA Site</a></span><span class="meta-pill">🌊 Wave pool + slides</span>
+      <span class="meta-pill">Gulf Shores</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🦁</div>
+      <div class="card-title">Alabama Gulf Coast Zoo</div>
+      <span class="card-badge badge-splurge">~$20–25</span>
+    </div>
+    <div class="card-body">
+      Best for families on an off-day. The real draw is the animal encounter add-ons — feeding lemurs, getting close to a sloth — at about $24.95 each. Easy morning activity that wraps up well before tournament games, and the perfect option for younger siblings and parents who want something different.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill">🦥 Sloth encounter</span>
+      <span class="meta-pill">🐾 Lemur feeding</span>
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=1204+Gulf+Shores+Pkwy,+Gulf+Shores,+AL+36542&q=Alabama+Gulf+Coast+Zoo" target="_blank">📍 1204 Gulf Shores Pkwy</a></span>
+    </div>
+  </div>
+
+  <!-- RESTAURANTS -->
+  <div class="section-label">
+    <div class="dot" style="background:var(--purple)"></div>
+    <h2>Restaurants for Large Groups</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🍋</div>
+      <div class="card-title">LuLu's</div>
+      <span class="card-badge badge-budget">Group-Friendly</span>
+    </div>
+    <div class="card-body">
+      The best all-ages team dinner spot on the strip. Part restaurant, part kid's paradise — climbing structure, giant sand area, face painting, and an arcade. Order at the counter and they bring food to your table, which makes coordinating large orders way less chaotic.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://lulubuffett.com/lulus/gulf-shores/" target="_blank">🔗 LuLu's Site</a></span><span class="meta-pill">🎮 Arcade</span>
+      <span class="meta-pill">🏖️ Sand play area</span>
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=200+E+25th+Ave,+Gulf+Shores,+AL+36542&q=LuLus+Gulf+Shores" target="_blank">📍 200 E 25th Ave</a></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🌮</div>
+      <div class="card-title">Cactus Cantina</div>
+      <span class="card-badge badge-budget">Group-Friendly</span>
+    </div>
+    <div class="card-body">
+      Laid-back Mexican chain with three Alabama Beaches locations — one in Gulf Shores, two in Orange Beach. Classic fajitas, nachos, tacos, burritos. Great for a post-game group meal where everyone can find something fast at a reasonable price. No one leaves hungry.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=25311+Perdido+Beach+Blvd,+Orange+Beach,+AL+36561&q=Cactus+Cantina+Orange+Beach" target="_blank">📍 Nearest: 25311 Perdido Beach Blvd</a></span>
+      <span class="meta-pill">🌯 Full Mexican menu</span>
+      <span class="meta-pill">Fast service</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🍔</div>
+      <div class="card-title">Sunliner Diner</div>
+      <span class="card-badge badge-budget">Group-Friendly</span>
+    </div>
+    <div class="card-body">
+      Retro diner serving burgers, milkshakes, and all-day breakfast for lunch and dinner. Noted for being large with plenty of seating — a key factor when you're moving 12+ players and families. Affordable, reliable, and no-stress for coaches coordinating a group meal.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill">🥤 Milkshakes</span>
+      <span class="meta-pill">🍳 All-day breakfast</span>
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=3800+Gulf+Shores+Pkwy,+Gulf+Shores,+AL+36542&q=Sunliner+Diner+Gulf+Shores" target="_blank">📍 3800 Gulf Shores Pkwy</a></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🦞</div>
+      <div class="card-title">The Gulf — Waterfront Dining</div>
+      <span class="card-badge badge-splurge">Mid-Range</span>
+    </div>
+    <div class="card-body">
+      Built from shipping containers and recycled materials, The Gulf overlooks Perdido Pass with outdoor seating perfect for a big group. The menu updates daily with the freshest available catch. Great pick for the team celebration dinner — the setting makes it feel like an occasion.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill">🌅 Waterfront views</span>
+      <span class="meta-pill"><a href="https://thegulf.com" target="_blank">🔗 The Gulf Site</a></span><span class="meta-pill"><a href="https://maps.apple.com/?address=27500+Perdido+Beach+Blvd,+Orange+Beach,+AL+36561&q=The+Gulf+Restaurant+Orange+Beach" target="_blank">📍 27500 Perdido Beach Blvd</a></span>
+      <span class="meta-pill">Orange Beach</span>
+    </div>
+  </div>
+
+  <!-- SHOPPING -->
+  <div class="section-label">
+    <div class="dot" style="background:var(--gold)"></div>
+    <h2>Shopping &amp; Convenience Stores</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🛒</div>
+      <div class="card-title">Walmart Neighborhood Market — Orange Beach</div>
+      <span class="card-badge badge-tip">Closest</span>
+    </div>
+    <div class="card-body">
+      Right in Orange Beach on Perdido Beach Blvd — your most convenient daily stop for snacks, sunscreen, sports drinks, and anything you forgot to pack. Grocery, pharmacy, and pickup orders available.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=25241+Perdido+Beach+Blvd,+Orange+Beach,+AL+36561&q=Walmart+Orange+Beach" target="_blank">📍 25241 Perdido Beach Blvd</a></span>
+      <span class="meta-pill">📞 (251) 974-1810</span>
+      <span class="meta-pill">Opens 7am daily</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🛒</div>
+      <div class="card-title">Walmart Supercenter — Gulf Shores</div>
+      <span class="card-badge badge-tip">Full Store</span>
+    </div>
+    <div class="card-body">
+      The full Supercenter about 5–6 miles away in Gulf Shores. Pharmacy, auto care, vision center, and full grocery. Better for bigger team supply runs — coolers, first aid, extra gear, or bulk snacks for the tournament.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=170+E+Fort+Morgan+Rd,+Gulf+Shores,+AL+36542&q=Walmart+Supercenter+Gulf+Shores" target="_blank">📍 170 E Fort Morgan Rd</a></span>
+      <span class="meta-pill">📞 (251) 968-5871</span>
+      <span class="meta-pill">Open 6am–11pm</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🎯</div>
+      <div class="card-title">Target — Gulf Shores</div>
+      <span class="card-badge badge-tip">Gulf Shores Only</span>
+    </div>
+    <div class="card-body">
+      Note: Target is in Gulf Shores, not Orange Beach. Worth the short drive for clothing, team gear, toiletries, or anything Target does better. Grocery Drive Up available if you order ahead.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=Gulf+Shores+Pkwy,+Gulf+Shores,+AL+36542&q=Target+Gulf+Shores" target="_blank">📍 Gulf Shores Pkwy</a></span>
+      <span class="meta-pill"><a href="https://www.target.com/sl/gulf-shores/2154" target="_blank">🚗 Target Gulf Shores</a></span>
+      <span class="meta-pill">~10 min from OB</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🛍️</div>
+      <div class="card-title">Publix &amp; Rouses — Local Grocery</div>
+      <span class="card-badge badge-tip">Quality Picks</span>
+    </div>
+    <div class="card-body">
+      Both Publix and Rouses are in Orange Beach and offer grocery pickup. Publix is the better pick for fresh deli, premade meals, and higher-quality produce. Rouses is a Gulf Coast regional chain with excellent seafood and local products. Great for stocking a rental kitchen and saving big on team meals.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill">🥗 Prepared meals</span>
+      <span class="meta-pill">🦐 Fresh Gulf seafood</span>
+      <span class="meta-pill">Pickup available</span>
+    </div>
+  </div>
+
+  <!-- OUTLET -->
+  <div class="section-label">
+    <div class="dot" style="background:var(--gold2)"></div>
+    <h2>Outlet Shopping</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">👟</div>
+      <div class="card-title">Tanger Outlets Foley</div>
+      <span class="card-badge badge-budget">~15 min away</span>
+    </div>
+    <div class="card-body">
+      Yes — there's a Tanger right here. Located in Foley on Hwy 59 (about 15 min from Orange Beach), it's a full open-air outlet mall with 120+ stores including <strong>Nike, Under Armour, Adidas, Coach, Polo Ralph Lauren, Michael Kors, Old Navy,</strong> and TJ Maxx. Perfect for a shopping day off the beach, and the back-to-school timing in mid-July means extra savings on athletic gear. Plan 4–5 hours if you really shop.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=2601+S+McKenzie+St,+Foley,+AL+36535&q=Tanger+Outlets+Foley" target="_blank">📍 2601 S McKenzie St, Foley</a></span>
+      <span class="meta-pill">🕙 Mon–Thu 10am–8pm</span>
+      <span class="meta-pill">🕙 Fri–Sat 10am–9pm</span>
+      <span class="meta-pill">☀️ Sun 10am–7pm</span>
+      <span class="meta-pill"><a href="https://www.tanger.com/foley" target="_blank">🔗 Tanger Foley Site</a></span><span class="meta-pill">⛳ Mini golf on-site</span>
+      <span class="meta-pill">🍴 Food court</span>
+    </div>
+  </div>
+
+  <!-- URGENT CARE -->
+  <div class="section-label">
+    <div class="dot" style="background:var(--coral)"></div>
+    <h2>Medical &amp; Urgent Care</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="alert-card">
+    <div class="card-header">
+      <div class="card-icon">🚑</div>
+      <div class="card-title">AFC Urgent Care — Orange Beach <span style="color:var(--coral);font-size:13px;font-weight:400;">(Closest to your stay)</span></div>
+      <span class="card-badge badge-urgent">Walk-In</span>
+    </div>
+    <div class="card-body">
+      Right on Perdido Beach Blvd in Orange Beach — the closest and most convenient urgent care to where you're staying. Walk-ins welcome, no referral needed. On-site digital X-rays, lab work, and a licensed provider on-site 7 days a week. Treats patients 6 months and up. Great for sprains, jammed fingers, minor cuts, sunburn complications, or anything that needs a quick professional look without the cost of an ER visit.
+      <br><br>
+      <strong>Self-pay options available</strong> for those without insurance.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=25775+Perdido+Beach+Blvd,+Orange+Beach,+AL+36561&q=AFC+Urgent+Care+Orange+Beach" target="_blank">📍 25775 Perdido Beach Blvd</a></span>
+      <span class="meta-pill">📞 <a href="tel:2519743004">(251) 974-3004</a></span>
+      <span class="meta-pill"><a href="https://www.afcurgentcare.com/orange-beach/" target="_blank">🔗 Book / Walk-In Info</a></span><span class="meta-pill">⏰ Mon–Fri 8am–7pm</span>
+      <span class="meta-pill">⏰ Sat–Sun 8am–6pm</span>
+      <span class="meta-pill">🩻 X-ray on-site</span>
+      <span class="meta-pill">🧪 Lab on-site</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🏥</div>
+      <div class="card-title">South Baldwin Medical Center — Gulf Shores Urgent Care</div>
+      <span class="card-badge badge-urgent">Backup Option</span>
+    </div>
+    <div class="card-body">
+      Hospital-affiliated urgent care in Gulf Shores — a stronger option for anything more serious than a minor injury. If a situation escalates beyond what AFC can handle, South Baldwin Regional Medical Center in Foley is the nearest full hospital.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=3719+Gulf+Shores+Pkwy,+Gulf+Shores,+AL+36542&q=South+Baldwin+Medical+Center+Urgent+Care" target="_blank">📍 Gulf Shores Urgent Care</a></span>
+      <span class="meta-pill">🏥 Hospital-affiliated</span>
+      <span class="meta-pill">More serious cases</span>
+    </div>
+  </div>
+
+  <!-- BATTING CAGES -->
+  <div class="section-label">
+    <div class="dot" style="background:var(--teal)"></div>
+    <h2>Local Batting Cages</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🥎</div>
+      <div class="card-title">Homerun Legends (Legends Athletics) — Summerdale</div>
+      <span class="card-badge badge-tip">Best for Teams</span>
+    </div>
+    <div class="card-body">
+      The top pick for a serious pre-tournament tune-up. This is a dedicated indoor training facility built specifically for travel teams visiting the area — baseball, fast-pitch softball, and slow-pitch all covered. Air-conditioned, turf floor, pitching machines included with rental. Cage rentals come with a bucket of balls, screen, and machine. They also have an open indoor turf area ideal for fielding drills. Credit packs available at a discount if multiple sessions are planned.
+      <br><br>
+      <strong>Coach note:</strong> Call ahead to book a team block — "both sides" team rentals are available and the facility is clearly set up to handle tournament groups.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=18301+Couch+Plant+Rd,+Summerdale,+AL+36580&q=Homerun+Legends" target="_blank">📍 18301 Couch Plant Rd, Summerdale</a></span>
+      <span class="meta-pill">📞 (251) 609-3825</span>
+      <span class="meta-pill">⏰ Mon–Thu 11am–9pm</span>
+      <span class="meta-pill">⏰ Fri 11am–6pm · Sat 12–6pm</span>
+      <span class="meta-pill">🌬️ Air-conditioned</span>
+      <span class="meta-pill"><a href="https://homerunlegends.com/rentals" target="_blank">🔗 Reserve a Cage</a></span><span class="meta-pill">⚾ Fast-pitch softball cage</span>
+      <span class="meta-pill">~20 min from OB</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🎳</div>
+      <div class="card-title">The Factory — Gulf Shores</div>
+      <span class="card-badge badge-budget">Fun + Cages</span>
+    </div>
+    <div class="card-body">
+      Claims to house the only indoor batting cages in Gulf Shores and the surrounding area. Three cages: slow-pitch baseball, fast-pitch baseball, and <strong>fast-pitch softball</strong>. The bonus here is that it's a full entertainment center — trampolines, climbing walls, arcade, dodgeball — so it doubles as a team activity day. Perfect for a late-tournament reward when you want girls to get some swings in but also just cut loose.
+      <br><br>
+      <strong>Heads up:</strong> Multiple reviews note the house bats can be warped. <strong>Bring your own bat.</strong>
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=18948+Oak+Rd+W,+Gulf+Shores,+AL+36542&q=The+Factory+Gulf+Shores" target="_blank">📍 18948 Oak Rd W, Gulf Shores</a></span>
+      <span class="meta-pill">📞 (251) 202-0900</span>
+      <span class="meta-pill">⏰ Wed 1–8pm · Thu 3–8pm</span>
+      <span class="meta-pill">⏰ Fri 3–9pm · Sat 10am–9pm · Sun 12–7pm</span>
+      <span class="meta-pill">🎯 3 cage options</span>
+      <span class="meta-pill">🏋️ Full entertainment center</span>
+      <span class="meta-pill">⚠️ Bring your own bat</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🏟️</div>
+      <div class="card-title">Gulf Shores Sportsplex — Tournament Facility Cages</div>
+      <span class="card-badge badge-free">May Be Included</span>
+    </div>
+    <div class="card-body">
+      The Gulf Shores Sportsplex (likely your tournament venue) has batting cages with indoor/outdoor carpet on-site. Depending on your tournament organization, these may be available during warm-up windows or between games. Check with your tournament director on cage access — it's worth asking before paying for outside rental.
+      <br><br>
+      <strong>Note:</strong> Steel cleats are prohibited in the cages per facility rules.
+    </div>
+    <div class="card-meta">
+      <span class="meta-pill"><a href="https://maps.apple.com/?address=19025+County+Rd+6+W,+Gulf+Shores,+AL+36542&q=Gulf+Shores+Sportsplex" target="_blank">📍 19025 Oak Road West</a></span>
+      <span class="meta-pill">🎟️ Tournament access TBD</span>
+      <span class="meta-pill">⚠️ No steel cleats</span>
+    </div>
+  </div>
+
+  <!-- BUDGET TIPS -->
+  <div class="section-label">
+    <div class="dot" style="background:var(--teal)"></div>
+    <h2>Team Budget Tips</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="quick-ref">
+    <h3>💡 Smart Money Moves for the Trip</h3>
+    <div class="qr-grid">
+      <div class="qr-item">
+        <strong>Cook in the rental</strong>
+        Hit Rouses or the Gulf Shores seafood markets for fresh catch and cook family-style — a fraction of restaurant cost for a team of 12+.
+      </div>
+      <div class="qr-item">
+        <strong>Order groceries ahead</strong>
+        Publix, Rouses, and Walmart all offer pickup. Schedule pickup for 1–2 hours after check-in so it's ready when you arrive.
+      </div>
+      <div class="qr-item">
+        <strong>Free nights at The Wharf</strong>
+        Check the Wharf event schedule before you arrive — free concerts and movie nights run all summer and cost nothing.
+      </div>
+      <div class="qr-item">
+        <strong>Tanger Club membership</strong>
+        Free to sign up and gives exclusive discounts across all 120 stores. Worth it if even a few families shop at Nike or Under Armour.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">KC Diamonds · Orange Beach 2025 · Coaches Darian Frost &amp; Mo Zahabi</div>
+
+<script>
+  function toggleTheme() {
+    const body = document.body;
+    body.dataset.theme = body.dataset.theme === 'dark' ? 'light' : 'dark';
+  }
+</script>
+</body>
+</html>
