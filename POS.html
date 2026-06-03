@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To Be Fair...</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --red: #c0392b;
+    --bg: #0a0a0a;
+    --text: #e8e0d0;
+    --muted: #ccc5b5;
+    --dim: #9a9080;
+    --rule: #222;
+    --pad-x: clamp(16px, 5vw, 60px);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    min-height: 100vh;
+    padding: clamp(32px, 6vw, 72px) var(--pad-x) clamp(48px, 8vw, 90px);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* ── Header ── */
+  header {
+    border-top: 4px solid var(--red);
+    padding-top: clamp(20px, 4vw, 40px);
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+
+  .kicker {
+    font-size: clamp(9px, 1.8vw, 11px);
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: clamp(12px, 2vw, 20px);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(22px, 4.5vw, 52px);
+    font-weight: 900;
+    line-height: 1.12;
+    color: #f5f0e8;
+    margin-bottom: 14px;
+    max-width: 820px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--red);
+  }
+
+  .subtitle {
+    font-size: clamp(13px, 2vw, 15px);
+    color: var(--dim);
+    font-style: italic;
+    border-left: 2px solid #333;
+    padding-left: 14px;
+    margin-top: clamp(14px, 2.5vw, 22px);
+    line-height: 1.6;
+  }
+
+  .count-badge {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(11px, 1.8vw, 13px);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 5px 14px;
+    margin-top: clamp(14px, 2.5vw, 24px);
+  }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, var(--red), #333, transparent);
+    margin: clamp(24px, 4vw, 44px) 0;
+  }
+
+  /* ── List ── */
+  ol {
+    list-style: none;
+    counter-reset: item-counter;
+    columns: 3;
+    column-gap: clamp(24px, 3vw, 52px);
+    column-rule: 1px solid var(--rule);
+  }
+
+  /* 2 columns: medium screens */
+  @media (max-width: 860px) {
+    ol { columns: 2; column-gap: clamp(20px, 3vw, 36px); }
+  }
+
+  /* 1 column: small screens */
+  @media (max-width: 540px) {
+    ol { columns: 1; }
+  }
+
+  li {
+    counter-increment: item-counter;
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: clamp(6px, 1vw, 9px) 0;
+    border-bottom: 1px solid #1a1a1a;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    font-size: clamp(12px, 1.5vw, 13.5px);
+    line-height: 1.55;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  li::before {
+    content: counter(item-counter);
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(9px, 1.2vw, 10px);
+    font-weight: 700;
+    color: var(--red);
+    min-width: 26px;
+    text-align: right;
+    flex-shrink: 0;
+    padding-top: 2px;
+    opacity: 0.85;
+  }
+
+  @media (hover: hover) {
+    li:hover {
+      background: rgba(192, 57, 43, 0.06);
+      color: var(--text);
+      padding-left: 4px;
+      transition: all 0.15s ease;
+    }
+  }
+
+  /* ── Footer ── */
+  footer {
+    margin-top: clamp(32px, 5vw, 56px);
+    padding-top: clamp(16px, 2.5vw, 26px);
+    border-top: 1px solid var(--rule);
+    font-size: clamp(11px, 1.6vw, 13px);
+    color: #555;
+    font-style: italic;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer span {
+    color: var(--red);
+    font-style: normal;
+    font-weight: 600;
+    font-family: 'Playfair Display', serif;
+    white-space: nowrap;
+  }
+
+  /* ── Term divider ── */
+  .term-break {
+    margin: clamp(40px, 6vw, 70px) 0 clamp(16px, 3vw, 28px);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .term-break h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(18px, 3vw, 28px);
+    font-weight: 900;
+    color: #f5f0e8;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .term-break h2 em { color: var(--red); font-style: italic; }
+
+  .term-break-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--red), #333, transparent);
+  }
+
+  .term-note {
+    font-size: clamp(11px, 1.6vw, 13px);
+    color: var(--dim);
+    font-style: italic;
+    border-left: 2px solid #333;
+    padding-left: 14px;
+    margin-bottom: clamp(20px, 3vw, 36px);
+    line-height: 1.6;
+  }
+
+  .term-note a { color: var(--red); text-decoration: none; opacity: 0.85; }
+  .term-note a:hover { opacity: 1; text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="kicker">A Complete Record &nbsp;·&nbsp; First Term 2017–2021</div>
+    <h1>I've been critical of the Trump presidency and am still exhausted from the experience. But to be fair, President Trump wasn't <em>that bad</em>, other than:</h1>
+    <p class="subtitle">Compiled verbatim from the original document. Every item as written.</p>
+    <div class="count-badge">235 Items</div>
+  </header>
+
+  <div class="divider"></div>
+
+  <ol>
+        <li>when he incited an insurrection against the government</li>
+        <li>mismanaged a pandemic that killed over a million Americans</li>
+        <li>separated children from their families</li>
+        <li>lost those children in the bureaucracy</li>
+        <li>tear-gassed peaceful protesters on Lafayette Square so he could hold a photo op holding a Bible in front of a church</li>
+        <li>tried to block all Muslims from entering the country</li>
+        <li>got impeached</li>
+        <li>got impeached again</li>
+        <li>had the worst jobs record of any president in modern history</li>
+        <li>pressured Ukraine to dig dirt on Joe Biden</li>
+        <li>fired the FBI director for investigating his ties to Russia</li>
+        <li>bragged about firing the FBI director on TV</li>
+        <li>took Vladimir Putin's word over the US intelligence community</li>
+        <li>diverted military funding to build his wall</li>
+        <li>caused the longest government shutdown in US history</li>
+        <li>called Black Lives Matter a &quot;symbol of hate&quot;</li>
+        <li>lied nearly 40,000 times</li>
+        <li>banned transgender people from serving in the military</li>
+        <li>ejected reporters from the White House briefing room who asked tough questions</li>
+        <li>vetoed the defense funding bill because it renamed military bases named for Confederate soldiers</li>
+        <li>refused to release his tax returns</li>
+        <li>increased the national debt by nearly $8 trillion</li>
+        <li>had three of the highest annual trade deficits in U.S. history</li>
+        <li>called veterans and soldiers who died in combat losers and suckers</li>
+        <li>coddled the leader of Saudi Arabia after he ordered the execution and dismembering of a US-based journalist</li>
+        <li>refused to concede the 2020 election</li>
+        <li>hired his unqualified daughter and son-in-law to work in the White House</li>
+        <li>walked out of an interview with Lesley Stahl</li>
+        <li>called neo-Nazis &quot;very fine people&quot;</li>
+        <li>suggested that people should inject bleach into their bodies to fight COVID</li>
+        <li>abandoned our allies the Kurds to Turkey</li>
+        <li>pushed through massive tax cuts for the wealthiest but balked at helping working Americans</li>
+        <li>incited anti-lockdown protestors in several states at the height of the pandemic</li>
+        <li>withdrew the US from the Paris climate accords</li>
+        <li>withdrew the US from the Iranian nuclear deal</li>
+        <li>withdrew the US from the Trans Pacific Partnership</li>
+        <li>insulted his own Cabinet members on Twitter</li>
+        <li>pushed the leader of Montenegro out of the way during a photo op</li>
+        <li>failed to reiterate US commitment to defending NATO allies</li>
+        <li>called Haiti and African nations &quot;shithole&quot; countries</li>
+        <li>called the city of Baltimore the &quot;worst in the nation&quot;</li>
+        <li>claimed that he single-handedly brought back the phrase &quot;Merry Christmas&quot; even though it hadn't gone anywhere</li>
+        <li>forced his Cabinet members to praise him publicly like some cult leader</li>
+        <li>believed he should be awarded the Nobel Peace Prize</li>
+        <li>berated and belittled his hand-picked Attorney General when he recused himself from the Russia probe</li>
+        <li>suggested the US should buy Greenland</li>
+        <li>colluded with Mitch McConnell to push through federal judges and two Supreme Court justices after supporting efforts to prevent his predecessor from appointing judges</li>
+        <li>repeatedly called the media &quot;enemies of the people&quot;</li>
+        <li>claimed that if we tested fewer people for COVID we'd have fewer cases</li>
+        <li>violated the emoluments clause</li>
+        <li>thought that Nambia was a country</li>
+        <li>told Bob Woodward in private that the coronavirus was a big deal but then downplayed it in public</li>
+        <li>called his exceedingly faithful vice president a &quot;p---y&quot; for following the Constitution</li>
+        <li>nearly got us into a war with Iran after threatening them by tweet</li>
+        <li>nominated a corrupt head of the EPA</li>
+        <li>nominated a corrupt head of HHS</li>
+        <li>nominated a corrupt head of the Interior Department</li>
+        <li>nominated a corrupt head of the USDA</li>
+        <li>praised dictators and authoritarians around the world while criticizing allies</li>
+        <li>refused to allow the presidential transition to begin</li>
+        <li>insulted war hero John McCain – even after his death</li>
+        <li>spent an obscene amount of time playing golf after criticizing Barack Obama for playing (far less) golf while president</li>
+        <li>falsely claimed that he won the 2016 popular vote</li>
+        <li>called the Muslim mayor of London a &quot;stone cold loser&quot;</li>
+        <li>falsely claimed that he turned down being Time's Man of the Year</li>
+        <li>considered firing special counsel Robert Mueller on several occasions</li>
+        <li>mocked wearing face masks to guard against transmitting COVID</li>
+        <li>locked Congress out of its constitutional duty to confirm Cabinet officials by hiring acting ones</li>
+        <li>used a racist dog whistle by calling COVID the &quot;China virus&quot;</li>
+        <li>hired and associated with numerous shady figures that were eventually convicted of federal offenses including his campaign manager and national security adviser</li>
+        <li>pardoned several of his shady associates</li>
+        <li>gave the Presidential Medal of Freedom to two congressman who amplified his batshit crazy conspiracy theories</li>
+        <li>got into telephone fight with the leader of Australia(!)</li>
+        <li>had a Secretary of State who called him a moron</li>
+        <li>forced his press secretary to claim without merit that his was the largest inauguration crowd in history</li>
+        <li>botched the COVID vaccine rollout</li>
+        <li>tweeted so much dangerous propaganda that Twitter eventually banned him</li>
+        <li>charged the Secret Service jacked-up rates at his properties</li>
+        <li>constantly interrupted Joe Biden in their first presidential debate</li>
+        <li>claimed that COVID would &quot;magically&quot; disappear</li>
+        <li>called a U.S. Senator &quot;Pocahontas&quot;</li>
+        <li>used his Twitter account to blast Nordstrom when it stopped selling Ivanka's merchandise</li>
+        <li>opened up millions of pristine federal lands to development and drilling</li>
+        <li>got into a losing tariff war with China that forced US taxpayers to bail out farmers</li>
+        <li>claimed that his losing tariff war was a win for the US</li>
+        <li>ignored or didn't even take part in daily intelligence briefings</li>
+        <li>blew off honoring American war dead in France because it was raining</li>
+        <li>redesigned Air Force One to look like the Trump Shuttle</li>
+        <li>got played by Kim Jung Un and his &quot;love letters&quot;</li>
+        <li>threatened to go after social media companies in clear violation of the Constitution</li>
+        <li>botched the response to Hurricane Maria in Puerto Rico</li>
+        <li>threw paper towels at Puerto Ricans when he finally visited them</li>
+        <li>pressured the governor and secretary of state of Georgia to &quot;find&quot; him votes</li>
+        <li>thought that the Virgin islands had a President</li>
+        <li>drew on a map with a Sharpie to justify his inaccurate tweet that Alabama was threatened by a hurricane</li>
+        <li>allowed White House staff to use personal email accounts for official businesses after blasting Hillary Clinton for doing the same thing</li>
+        <li>rolled back regulations that protected the public from mercury and asbestos</li>
+        <li>pushed regulators to waste time studying snake-oil remedies for COVID</li>
+        <li>rolled back regulations that stopped coal companies from dumping waste into rivers</li>
+        <li>held blatant campaign rallies at the White House</li>
+        <li>tried to take away millions of Americans' health insurance because the law was named for a Black man</li>
+        <li>refused to attend his successors' inauguration</li>
+        <li>nominated the worst Education Secretary in history</li>
+        <li>threatened judges who didn't do what he wanted</li>
+        <li>attacked Dr. Anthony Fauci</li>
+        <li>promised that Mexico would pay for the wall (it didn't)</li>
+        <li>allowed political hacks to overrule government scientists on major reports on climate change and other issues</li>
+        <li>struggled navigating a ramp after claiming his opponent was feeble</li>
+        <li>called an African-American Congresswoman &quot;low IQ&quot;</li>
+        <li>threatened to withhold federal aid from states and cities with Democratic leaders</li>
+        <li>went ahead with rallies filled with maskless supporters in the middle of a pandemic</li>
+        <li>claimed that legitimate investigations of his wrongdoing were &quot;witch hunts&quot;</li>
+        <li>seemed to demonstrate a belief that there were airports during the American Revolution</li>
+        <li>demanded &quot;total loyalty&quot; from the FBI director</li>
+        <li>praised a conspiracy theory that Democrats are Satanic pedophiles</li>
+        <li>completely gutted the Voice of America</li>
+        <li>placed a political hack in charge of the Postal Service</li>
+        <li>claimed without evidence that the Obama administration bugged Trump Tower</li>
+        <li>suggested that the US should allow more people from places like Norway into the country</li>
+        <li>suggested that COVID wasn't that bad because he recovered with the help of top government doctors and treatments not available to the public</li>
+        <li>overturned energy conservation standards that even industry supported</li>
+        <li>reduced the number of refugees the US accepts</li>
+        <li>insulted various members of Congress and the media with infantile nicknames</li>
+        <li>gave Rush Limbaugh a Presidential Medal of Freedom at the State of the Union address</li>
+        <li>named as head of federal personnel a 29-year old who'd previously been fired from the White House for allegations of financial improprieties</li>
+        <li>eliminated the White House office of pandemic response</li>
+        <li>used soldiers as campaign props</li>
+        <li>fired any advisor who made the mistake of disagreeing with him</li>
+        <li>demanded the Pentagon throw him a Soviet-style military parade</li>
+        <li>hired a shit ton of white nationalists</li>
+        <li>politicized the civil service</li>
+        <li>did absolutely nothing after Russia hacked the U.S. government</li>
+        <li>claimed that Black people would overrun the suburbs if Biden won</li>
+        <li>insulted reporters of color</li>
+        <li>insulted women reporters</li>
+        <li>insulted women reporters of color</li>
+        <li>suggested he was fine with China's oppression of the Uighurs</li>
+        <li>attacked the Supreme Court when it ruled against him</li>
+        <li>summoned Pennsylvania state legislative leaders to the White House to pressure them to overturn the election</li>
+        <li>spent countless hours every day watching Fox News</li>
+        <li>refused to allow his administration to comply with Congressional subpoenas</li>
+        <li>hired Rudy Giuliani as his lawyer</li>
+        <li>tried to punish Amazon because the Jeff Bezos-owned Washington Post wrote negative stories about him</li>
+        <li>acted as if the Attorney General of the United States was his personal attorney</li>
+        <li>attempted to get the federal government to defend him in a libel lawsuit from a woman who accused him of sexual assault</li>
+        <li>held private meetings with Vladimir Putin without staff present</li>
+        <li>didn't disclose his private meetings with Vladimir Putin so that the US had to find out via Russian media</li>
+        <li>stopped holding press briefings for months at a time</li>
+        <li>&quot;ordered&quot; US companies to leave China even though he has no such power</li>
+        <li>led a political party that couldn't even be bothered to draft a policy platform</li>
+        <li>claimed preposterously that Article II of the Constitution gave him absolute powers</li>
+        <li>tried to pressure the U.K. to hold the British Open at his golf course</li>
+        <li>suggested that the government nuke hurricanes</li>
+        <li>suggested that wind turbines cause cancer</li>
+        <li>said that he had a special aptitude for science</li>
+        <li>fired the head of election cyber security after he said that the 2020 election was secure</li>
+        <li>blurted out classified information to Russian officials</li>
+        <li>tried to force the G7 to hold their meeting at his failing golf resort in Florida</li>
+        <li>fired the acting attorney general when she refused to go along with his unconstitutional Muslim travel ban</li>
+        <li>hired Stephen Miller</li>
+        <li>openly discussed national security issues in the dining room at Mar-a-Lago where everyone could hear them</li>
+        <li>interfered with plans to relocate the FBI because a new development there might compete with his hotel</li>
+        <li>abandoned Iraqi refugees who'd helped the U.S. during the war</li>
+        <li>tried to get Russia back into the G7</li>
+        <li>held a COVID super spreader event in the Rose Garden</li>
+        <li>seemed to believe that Frederick Douglass is still alive</li>
+        <li>lost 60 election fraud cases in court including before judges he had nominated</li>
+        <li>falsely claimed that factories were reopening when they weren't</li>
+        <li>shamelessly exploited terror attacks in Europe to justify his anti-immigrant policies</li>
+        <li>still hasn't come up with a healthcare plan</li>
+        <li>still hasn't come up with an infrastructure plan despite repeated &quot;Infrastructure Weeks&quot;</li>
+        <li>forced Secret Service agents to drive him around Walter Reed while contagious with COVID</li>
+        <li>told the Proud Boys to &quot;stand back and stand by&quot;</li>
+        <li>fucked up the Census</li>
+        <li>withdrew the U.S. from the World Health Organization in the middle of a pandemic</li>
+        <li>did so few of his duties that his press staff were forced to state on his daily schedule &quot;President Trump will work from early in the morning until late in the evening. He will make many calls and have many meetings,&quot; allowed his staff to repeatedly violate the Hatch Act</li>
+        <li>seemed not to know that Abraham Lincoln was a Republican</li>
+        <li>stood before sacred CIA wall of heroes and bragged about his election win</li>
+        <li>constantly claimed he was treated worse than any president which presumably includes four that were assassinated and his predecessor whose legitimacy and birthplace were challenged by a racist reality TV show star named Donald Trump</li>
+        <li>claimed Andrew Jackson could've stopped the Civil War even though he died 16 years before it happened</li>
+        <li>said that any opinion poll showing him behind was fake</li>
+        <li>claimed that other countries laughed at us before he became president when several world leaders were literally laughing at him</li>
+        <li>claimed that the military was out of ammunition before he became President</li>
+        <li>created a commission to whitewash American history</li>
+        <li>retweeted anti-Islam videos from one of the most racist people in Britain</li>
+        <li>claimed ludicrously that the Pulse nightclub shooting wouldn't have happened if someone there had a gun even though there was an armed security guard there</li>
+        <li>hired a senior staffer who cited the non-existent Bowling Green Massacre as a reason to ban Muslims</li>
+        <li>had a press secretary who claimed that Nazi Germany never used chemical weapons even though every sane human being knows they used gas to kill millions of Jews and others</li>
+        <li>bilked the Secret Service for higher than market rates when they had to stay at Trump properties</li>
+        <li>apparently sold pardons on his way out of the White House</li>
+        <li>stripped protective status from 59,000 Haitians</li>
+        <li>falsely claimed Biden wanted to defund the police</li>
+        <li>said that the head of the CDC didn't know what he was talking about</li>
+        <li>tried to rescind protection from DREAMers</li>
+        <li>gave himself an A+ for his handling of the pandemic</li>
+        <li>tried to start a boycott of Goodyear tires due to an Internet hoax</li>
+        <li>said U.S. rates of COVID would be lower if you didn't count blue states</li>
+        <li>deported U.S. veterans who served their country but were undocumented</li>
+        <li>claimed he did more for African Americans than any president since Lincoln</li>
+        <li>touted a &quot;super-duper&quot; secret &quot;hydrosonic&quot; missile which may or may not be a new &quot;hypersonic&quot; missile or may not exist at all</li>
+        <li>retweeted a gif calling Biden a pedophile</li>
+        <li>forced through security clearances for his family</li>
+        <li>suggested that police officers should rough up suspects</li>
+        <li>suggested that Biden was on performance-enhancing drugs</li>
+        <li>tried to stop transgender students from being able to use school bathrooms in line with their gender</li>
+        <li>suggested the US not accept COVID patients from a cruise ship because it would make US numbers look higher</li>
+        <li>nominated a climate change skeptic to chair the committee advising the White House on environmental policy</li>
+        <li>retweeted a video doctored to look like Biden had played a song called &quot;Fuck tha Police&quot; at a campaign event</li>
+        <li>hugged a disturbingly large number of U.S. flags</li>
+        <li>accused Democrats of &quot;treason&quot; for not applauding his State of the Union address</li>
+        <li>claimed that the FBI failed to capture the Parkland school shooter because they were &quot;spending too much time&quot; on Russia</li>
+        <li>mocked the testimony of Dr Christine Blasey Ford when she accused Brett Kavanaugh of sexual assault</li>
+        <li>obsessed over low-flow toilets</li>
+        <li>ordered the re-release of more COVID vaccines when there weren't any to release</li>
+        <li>called for the construction of a bizarre garden of heroes with statues of famous dead Americans as well as at least one Canadian (Alex Trebek)</li>
+        <li>hijacked Washington's July 4th celebrations to give a partisan speech</li>
+        <li>took advice from the MyPillow guy</li>
+        <li>claimed that migrants seeking a better life in the US were dangerous caravans of drug dealers and rapists</li>
+        <li>said nothing when Vladimir Putin poisoned a leading opposition figure</li>
+        <li>never seemed to heed the advice of his wife's &quot;Be Best&quot; campaign</li>
+        <li>falsely claimed that mail-in voting is fraudulent</li>
+        <li>announced a precipitous withdrawal of troops from Syria which not only handed Russia and ISIS a win but also prompted his defense secretary to resign in protest</li>
+        <li>insulted the leader of Canada</li>
+        <li>insulted the leader of France</li>
+        <li>insulted the leader of Britain</li>
+        <li>insulted the leader of Germany</li>
+        <li>insulted the leader of Sweden (Sweden!!)</li>
+        <li>falsely claimed credit for getting NATO members to increase their share of dues</li>
+        <li>blew off two Asia summits even though they were held virtually</li>
+        <li>continued lying about spending lots of time at Ground Zero with 9/11 responders</li>
+        <li>said that the Japanese would sit back and watch their &quot;Sony televisions&quot; if the US were ever attacked</li>
+        <li>left a NATO summit early in a huff</li>
+        <li>stared directly into an eclipse even though everyone over the age of five knows not to do that</li>
+        <li>called himself a very stable genius despite significant evidence to the contrary</li>
+        <li>refused to commit to a peaceful transfer of power and kept his promise</li>
+  </ol>
+
+  <footer>
+    <div>And a whole bunch of other things I can't remember at the moment.</div>
+    <span>235 (Term 1)</span>
+  </footer>
+
+  <!-- SECOND TERM -->
+  <div class="term-break">
+    <h2>Second Term — <em>2025–present</em></h2>
+    <div class="term-break-line"></div>
+    <div class="count-badge">60+ Items</div>
+  </div>
+
+  <p class="term-note">
+    No single authoritative tally exists yet for the second term — the Washington Post's famous 30,573-claim counter has not been restarted. The items below are drawn from documented fact-checks by
+    <a href="https://www.cnn.com/politics/fact-check-trump-false-claims-debunked" target="_blank">CNN</a>,
+    <a href="https://www.factcheck.org/2025/12/the-whoppers-of-2025/" target="_blank">FactCheck.org</a>, and
+    <a href="https://en.wikipedia.org/wiki/False_or_misleading_statements_by_Donald_Trump_(second_term)" target="_blank">Wikipedia's running record</a>.
+    Each item below was independently verified as false or materially misleading.
+  </p>
+
+  <ol style="counter-reset: item-counter;">
+    <li>claimed grocery prices "are down" and "WAY DOWN" — they had continued rising since he took office, with the Feb–Mar jump the biggest single-month increase since October 2022</li>
+    <li>claimed the cost of eggs had come down "93, 94%" since taking office — consumer egg prices hit a record high in March 2025; wholesale prices had fallen roughly 52%, not 93%</li>
+    <li>claimed gas prices had fallen to $1.98 per gallon in two states — not a single state's average was below $2.70 per gallon that day, and no individual station tracked by GasBuddy was below $2.19</li>
+    <li>claimed there was "no inflation" during his first presidency — prices rose about 8% from start to end of his first term</li>
+    <li>claimed Biden's administration had the highest inflation "in the history of our country" — the actual all-time record of 23.7% was set in 1920; Biden's peak was 9.1%</li>
+    <li>claimed the price of bacon "quadrupled" under Biden — federal statistics show it rose about 19–21%, not 300%</li>
+    <li>claimed the price of apples doubled under Biden — federal data shows apples increased about 7–8%</li>
+    <li>claimed the US was losing "$2 trillion a year on trade" — the actual 2024 goods-and-services deficit was about $918 billion</li>
+    <li>claimed the US was already collecting $2–3.5 billion per day in tariff revenue in early April 2025 — the actual figure was in the hundreds of millions at most</li>
+    <li>claimed the US has a "$350 billion" trade deficit with Mexico — federal statistics show it was about $179–182 billion in 2024</li>
+    <li>claimed he had made "200 deals" with other countries on tariffs when no deals had been announced</li>
+    <li>claimed Honda "just announced" it is building "a really big plant in Indiana" — Honda told CNN it had announced no such plans</li>
+    <li>claimed 1870–1913 was "the richest period in the history of the United States, relatively speaking" — economists say per-capita GDP is many times higher today</li>
+    <li>claimed he signed "the largest tax cut in history" during his first term — expert analyses find it was not the largest by any standard measure</li>
+    <li>claimed Ukraine started the war with Russia, saying "You should've never started it" — Russia annexed Crimea in 2014 and launched a full-scale invasion in 2022</li>
+    <li>claimed the US had provided "$350 billion" in wartime aid to Ukraine — the Kiel Institute tracked about $130–135 billion actually committed and allocated</li>
+    <li>claimed Europe had provided $200 billion less in Ukraine aid than the US — Kiel Institute data shows Europe committed and allocated more than the US</li>
+    <li>claimed he was "clearly speaking in jest" when he pledged to end the Ukraine war on "day one" — he made the pledge at least 53 times in a serious tone</li>
+    <li>claimed Zelensky had an approval rating of "4%" — surveys found 57–63% of Ukrainians approved of Zelensky</li>
+    <li>claimed Zelensky admitted "half of the money we sent him is missing" — Zelensky made no such admission</li>
+    <li>claimed his first full month back had "the lowest level of illegal border crossings ever recorded" — it was the lowest since the early 1960s, not the lowest ever recorded</li>
+    <li>claimed the US had provided "$350 billion" in Ukraine aid (repeated across multiple speeches)</li>
+    <li>claimed job growth figures were "phony" or "rigged" when firing the head of the Bureau of Labor Statistics — no evidence was provided</li>
+    <li>claimed $50 million in foreign aid was being used to buy condoms for Hamas in Gaza — refuted by the contractor identified by the State Department</li>
+    <li>falsely reprimanded Ukraine saying "You should have never started it" after US–Russia talks in Saudi Arabia — Russia, not Ukraine, started the war</li>
+    <li>claimed he had "secured a record-breaking $18 trillion of investment" in the US during his second presidency — fact-checkers called the figure fiction</li>
+    <li>claimed inflation was "at 1.6% for the last three months just prior to the war with Iran" — the actual rate was 3.0% when he returned to office and had not dropped to 1.6%</li>
+    <li>claimed overall prices were falling before the US–Iran war — consumer prices were up 2.9% overall since the start of his second term through February 2026</li>
+    <li>claimed "factory construction is up" — manufacturing construction spending had declined every single month of his second term through March 2026</li>
+    <li>claimed he had ended seven wars and reduced global conflicts in his UN address — fact-checkers found these assertions misrepresented timelines, US roles, and complex international dynamics</li>
+    <li>claimed Europe was buying huge amounts of US energy — misrepresented the actual scope and terms of European energy purchases</li>
+    <li>claimed the UN was ineffective, citing achievements that independent analysts said were misattributed or exaggerated</li>
+    <li>claimed migration had been "ended" — border crossings had declined significantly but not ended</li>
+    <li>claimed he had personally settled multiple active conflicts, crediting himself for ceasefires and peace processes that were ongoing or had other primary causes</li>
+    <li>claimed "the military was the strongest it's ever been" — echoing a version of the same false claim from his first term</li>
+    <li>claimed repeatedly that he won the 2020 election, which he lost to Joe Biden — continued into his second term without any new evidence</li>
+    <li>claimed he had "already served three" presidential terms, falsely asserting he was president during the Biden years</li>
+    <li>claimed he had the largest inauguration crowd in history — a claim first made in 2017 and repeated again in 2025 despite photographic evidence to the contrary</li>
+    <li>claimed the Obama administration had "bugged" Trump Tower — repeated with no new evidence in 2025</li>
+    <li>claimed the 2020 election was "the most corrupt in history" — 60+ court cases, including before his own appointed judges, found no evidence of widespread fraud</li>
+    <li>claimed his tariff calculations were based on what other countries charge the US — economists widely rejected the methodology as illegitimate</li>
+    <li>claimed the reciprocal tariff formula was mathematically derived from trade imbalances — it was actually derived by dividing the trade deficit by import volume, a method economists called economically nonsensical</li>
+    <li>claimed the US never had a deal with China on tariffs when a temporary agreement reducing tariffs was publicly announced</li>
+    <li>claimed autism rates are caused by vaccines — a claim debunked by decades of peer-reviewed research</li>
+    <li>claimed that reducing Tylenol use could address autism rates — no scientific basis for the claim</li>
+    <li>claimed his administration had brought inflation down to historic lows — inflation rose from 3.0% when he took office to 3.8% by April 2026, the highest since May 2023</li>
+    <li>claimed he had secured more foreign investment than any president in history — the "$17–18 trillion" figure was called fiction by multiple independent fact-checkers</li>
+    <li>falsely attributed California's retail theft problem to policies of Vice President Harris</li>
+    <li>claimed housing costs are primarily driven by migration — experts and fact-checkers found this unsupported by economic data</li>
+    <li>claimed he was spending "lots of time" at Ground Zero with 9/11 first responders during his first term — a claim he repeated in his second term that was documented as false</li>
+    <li>claimed he "personally" brokered a ceasefire in Gaza — the ceasefire negotiations involved multiple parties over many months before his inauguration</li>
+    <li>claimed crime was at an all-time high when he returned to office — FBI data showed violent crime had been declining</li>
+    <li>claimed he "ended" illegal immigration — border crossings decreased but did not end; deportation figures were also overstated relative to official data</li>
+    <li>claimed foreign companies are paying the tariffs — US importers, not foreign exporters, pay tariff revenue</li>
+    <li>claimed the US was treated as a "laughingstock" before he returned — echoing a first-term claim with no factual basis</li>
+    <li>said he alone deserved credit for the stock market's performance while deflecting blame for drops caused by his own tariff announcements</li>
+    <li>claimed to have declassified documents "mentally" — no legal mechanism exists for mental declassification</li>
+    <li>claimed his handling of the pandemic response in his second term was "perfect" — public health officials documented multiple policy reversals and unscientific interventions</li>
+    <li>claimed DOGE had saved "trillions" — independent analyses found the actual documented savings were a small fraction of the claimed figure</li>
+    <li>claimed Greenland's population "wants to join the United States" — Greenland's government and polling of its population consistently rejected this</li>
+    <li>claimed Canada would be "better off" as the 51st state — Canadian officials and polling showed overwhelming opposition</li>
+  </ol>
+
+  <footer>
+    <div>And a whole bunch of other things I can't remember at the moment.</div>
+  </footer>
+</div>
+</body>
+</html>
