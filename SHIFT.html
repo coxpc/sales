@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHIFT Scout Outreach Copilot — Agent Instructions</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --shift-blue: #1B6FC8;
+    --shift-teal: #00A3B4;
+    --shift-purple: #7B5EA7;
+    --shift-orange: #E87722;
+    --shift-green: #3A8C4C;
+    --navy: #0D1B2A;
+    --navy-mid: #162435;
+    --bg: #F4F6FA;
+    --white: #FFFFFF;
+    --text: #1A2233;
+    --muted: #6B7A99;
+    --border: #DDE2EE;
+    --code-bg: #F0F4FA;
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* PRINT */
+  @media print {
+    body { background: white; }
+    .no-print { display: none; }
+    .page-break { page-break-before: always; }
+    .card { box-shadow: none; border: 1px solid #ccc; }
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section-accent { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .prompt-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--navy);
+    padding: 32px 48px 28px;
+    border-bottom: 4px solid var(--shift-blue);
+  }
+
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .header-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .shift-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    display: flex;
+    gap: 1px;
+  }
+  .s { color: #00C8D8; }
+  .h { color: #A78BCC; }
+  .i { color: #F4A24A; }
+  .f { color: #5CB87A; }
+  .t { color: #5BA3E8; }
+
+  .header-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .header-subtitle {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .header-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .header-desc {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .meta-chip {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .meta-chip.highlight {
+    color: var(--shift-teal);
+    border-color: rgba(0,163,180,0.4);
+  }
+
+  /* TOC — horizontal bar (default, shown below 1200px) */
+  .toc-bar {
+    background: var(--navy-mid);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 48px;
+  }
+
+  .toc-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  .toc-link {
+    display: block;
+    padding: 12px 18px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .toc-link:hover { color: rgba(255,255,255,0.8); border-bottom-color: rgba(255,255,255,0.2); }
+  .toc-link.active { color: var(--shift-teal); border-bottom-color: var(--shift-teal); }
+
+  /* SIDEBAR TOC — hidden by default, shown at wide viewport */
+  .sidebar-toc {
+    display: none;
+  }
+
+  /* PAGE SHELL — single column by default */
+  .page-shell {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* MAIN */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 48px 60px;
+  }
+
+  /* SECTIONS */
+  .doc-section {
+    margin-bottom: 48px;
+  }
+
+  .section-accent {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .section-tag {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .tag-blue { background: rgba(27,111,200,0.12); color: var(--shift-blue); }
+  .tag-teal { background: rgba(0,163,180,0.12); color: var(--shift-teal); }
+  .tag-orange { background: rgba(232,119,34,0.12); color: var(--shift-orange); }
+  .tag-green { background: rgba(58,140,76,0.12); color: var(--shift-green); }
+  .tag-purple { background: rgba(123,94,167,0.12); color: var(--shift-purple); }
+  .tag-navy { background: rgba(13,27,42,0.08); color: var(--navy); }
+
+  .section-heading {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+
+  .section-intro {
+    font-size: 0.9rem;
+    color: var(--muted);
+    max-width: 700px;
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  /* ── WIDE VIEWPORT: 1200px+ ── */
+  @media (min-width: 1200px) {
+    .header-inner { max-width: 1400px; }
+    .toc-bar { display: none; }
+
+    .sidebar-toc {
+      display: block;
+      position: sticky;
+      top: 32px;
+      width: 220px;
+      flex-shrink: 0;
+      align-self: flex-start;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 10px rgba(13,27,42,0.06);
+      overflow: hidden;
+    }
+
+    .sidebar-toc-header {
+      padding: 12px 16px;
+      background: var(--navy);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--shift-teal);
+    }
+
+    .sidebar-toc-links {
+      padding: 8px 0;
+    }
+
+    .sidebar-toc-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .sidebar-toc-link:hover {
+      color: var(--shift-blue);
+      background: rgba(27,111,200,0.04);
+      border-left-color: rgba(27,111,200,0.3);
+    }
+
+    .sidebar-toc-link.active {
+      color: var(--shift-blue);
+      background: rgba(27,111,200,0.07);
+      border-left-color: var(--shift-blue);
+      font-weight: 600;
+    }
+
+    .sidebar-toc-num {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: rgba(27,111,200,0.4);
+      width: 16px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-toc-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 6px 16px;
+    }
+
+    .page-shell {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      padding: 32px 48px 60px;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    .main {
+      flex: 1;
+      max-width: none;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .footer-inner { max-width: 1500px; }
+  }
+
+  /* ── EXTRA WIDE: 1400px+ grids expand ── */
+  @media (min-width: 1400px) {
+    .overview-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .channel-grid  { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+    .page-shell { padding: 40px 64px 72px; }
+
+    .sidebar-toc { width: 240px; }
+
+    .section-heading { font-size: 1.5rem; }
+
+    .prompt-box-body { font-size: 0.82rem; padding: 22px 26px; }
+
+    .section-intro { max-width: 780px; font-size: 0.925rem; }
+
+    .card-body { padding: 24px 26px; }
+
+    .dos-donts { gap: 18px; }
+    .dos, .donts { padding: 20px 22px; }
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 10px rgba(13,27,42,0.06);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .card-header {
+    padding: 13px 20px;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-header-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .card-header-label.blue { color: #5BA3E8; }
+  .card-header-label.teal { color: #00C8D8; }
+  .card-header-label.orange { color: #F4A24A; }
+  .card-header-label.green { color: #5CB87A; }
+  .card-header-label.purple { color: #A78BCC; }
+
+  .card-header-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .card-body {
+    padding: 20px 22px;
+  }
+
+  /* OVERVIEW GRID */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .overview-item {
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--white);
+  }
+
+  .overview-item-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+
+  .overview-item-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .overview-item-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  /* STEP LIST */
+  .step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .step-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-content {}
+
+  .step-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 3px;
+  }
+
+  .step-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .step-desc code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    background: var(--code-bg);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--shift-blue);
+  }
+
+  /* PROMPT BOX */
+  .prompt-box {
+    background: var(--navy);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .prompt-box-header {
+    padding: 10px 18px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .prompt-box-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--shift-teal);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .prompt-box-label::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--shift-teal);
+  }
+
+  .prompt-box-hint {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+  }
+
+  .prompt-box-body {
+    padding: 18px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .prompt-highlight {
+    color: #5CB87A;
+    font-weight: 500;
+  }
+
+  .prompt-comment {
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+  }
+
+  /* EXAMPLE BOX */
+  .example-box {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+
+  .example-header {
+    padding: 9px 16px;
+    background: var(--code-bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .example-channel {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .example-body {
+    padding: 16px 18px;
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.65;
+    background: var(--white);
+  }
+
+  .example-body strong {
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .example-body .user-line {
+    color: var(--shift-blue);
+    font-style: italic;
+  }
+
+  .example-body .agent-line {
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: var(--code-bg);
+    border-left: 3px solid var(--shift-teal);
+    border-radius: 0 4px 4px 0;
+    font-size: 0.82rem;
+  }
+
+  /* CHANNEL GRID */
+  .channel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .channel-card {
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--white);
+  }
+
+  .channel-card-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .channel-icon {
+    font-size: 1.2rem;
+  }
+
+  .channel-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  .channel-use {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .channel-trigger {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--shift-blue);
+    background: rgba(27,111,200,0.07);
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  /* DO / DON'T TABLE */
+  .dos-donts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .dos, .donts {
+    padding: 16px 18px;
+    border-radius: 6px;
+  }
+
+  .dos {
+    background: rgba(58,140,76,0.06);
+    border: 1px solid rgba(58,140,76,0.2);
+  }
+
+  .donts {
+    background: rgba(220,38,38,0.05);
+    border: 1px solid rgba(220,38,38,0.15);
+  }
+
+  .dos-title, .donts-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .dos-title { color: var(--shift-green); }
+  .donts-title { color: #DC2626; }
+
+  .dos ul, .donts ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .dos li, .donts li {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    padding-left: 18px;
+    position: relative;
+    color: var(--text);
+  }
+
+  .dos li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--shift-green);
+    font-weight: 700;
+    font-size: 0.72rem;
+    top: 1px;
+  }
+
+  .donts li::before {
+    content: '✕';
+    position: absolute;
+    left: 0;
+    color: #DC2626;
+    font-weight: 700;
+    font-size: 0.72rem;
+    top: 1px;
+  }
+
+  /* CALLOUT */
+  .callout {
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-size: 0.83rem;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .callout-blue {
+    background: rgba(27,111,200,0.07);
+    border-left: 3px solid var(--shift-blue);
+    color: var(--navy);
+  }
+
+  .callout-orange {
+    background: rgba(232,119,34,0.07);
+    border-left: 3px solid var(--shift-orange);
+    color: var(--navy);
+  }
+
+  .callout-green {
+    background: rgba(58,140,76,0.07);
+    border-left: 3px solid var(--shift-green);
+    color: var(--navy);
+  }
+
+  .callout-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* INLINE CODE */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    background: var(--code-bg);
+    color: var(--shift-blue);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 36px 0;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--navy);
+    padding: 20px 48px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .footer-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text {
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.04em;
+  }
+
+  /* PRINT BUTTON */
+  .print-btn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    padding: 10px 20px;
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(13,27,42,0.25);
+    transition: background 0.15s;
+    z-index: 100;
+  }
+
+  .print-btn:hover { background: var(--shift-blue); }
+
+  /* ── MOBILE: under 700px ── */
+  @media (max-width: 700px) {
+    .main { padding: 28px 20px; }
+    .header { padding: 24px 20px; }
+    .toc-bar { padding: 0 20px; }
+    .overview-grid, .channel-grid, .dos-donts { grid-template-columns: 1fr; }
+    .footer { padding: 16px 20px; }
+    .page-shell { padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-eyebrow">
+      <div class="shift-logo"><span class="s">S</span><span class="h">H</span><span class="i">I</span><span class="f">F</span><span class="t">T</span></div>
+      <div class="header-divider"></div>
+      <div class="header-subtitle">Scout · S1 Outreach · Copilot Agent</div>
+    </div>
+    <div class="header-title">Scout Outreach Copilot<br>Agent Instructions</div>
+    <div class="header-desc">Everything you need to use the SHIFT Scout Outreach Copilot in Microsoft Teams — what it does, how to talk to it, and how to get the best draft every time.</div>
+    <div class="header-meta">
+      <span class="meta-chip highlight">Microsoft Copilot Studio · Teams</span>
+      <span class="meta-chip">Scout Pillar · S1 Outreach</span>
+      <span class="meta-chip">Cox Automotive · Market Readiness</span>
+    </div>
+  </div>
+</header>
+
+<!-- TOC -->
+<nav class="toc-bar no-print">
+  <div class="toc-inner">
+    <a class="toc-link" href="#overview">Overview</a>
+    <a class="toc-link" href="#system-prompt">System Prompt</a>
+    <a class="toc-link" href="#how-to-use">How to Use</a>
+    <a class="toc-link" href="#channels">Channels</a>
+    <a class="toc-link" href="#examples">Examples</a>
+    <a class="toc-link" href="#dos-donts">Do's & Don'ts</a>
+    <a class="toc-link" href="#tips">Pro Tips</a>
+    <a class="toc-link" href="#copilot-setup">Copilot Setup</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+  <!-- SIDEBAR TOC (visible at 1200px+) -->
+  <aside class="sidebar-toc no-print">
+    <div class="sidebar-toc-header">Contents</div>
+    <nav class="sidebar-toc-links">
+      <a class="sidebar-toc-link" href="#overview"><span class="sidebar-toc-num">1</span>Overview</a>
+      <a class="sidebar-toc-link" href="#system-prompt"><span class="sidebar-toc-num">2</span>System Prompt</a>
+      <a class="sidebar-toc-link" href="#how-to-use"><span class="sidebar-toc-num">3</span>How to Use</a>
+      <a class="sidebar-toc-link" href="#channels"><span class="sidebar-toc-num">4</span>Channels</a>
+      <a class="sidebar-toc-link" href="#examples"><span class="sidebar-toc-num">5</span>Examples</a>
+      <div class="sidebar-toc-divider"></div>
+      <a class="sidebar-toc-link" href="#dos-donts"><span class="sidebar-toc-num">6</span>Do's &amp; Don'ts</a>
+      <a class="sidebar-toc-link" href="#tips"><span class="sidebar-toc-num">7</span>Pro Tips</a>
+      <a class="sidebar-toc-link" href="#copilot-setup"><span class="sidebar-toc-num">8</span>Copilot Setup</a>
+    </nav>
+  </aside>
+
+<div class="main">
+
+  <!-- ─── SECTION 1: OVERVIEW ─── -->
+  <div class="doc-section" id="overview">
+    <div class="section-accent">
+      <span class="section-tag tag-blue">Section 1</span>
+    </div>
+    <h2 class="section-heading">What This Agent Does</h2>
+    <p class="section-intro">The Scout Outreach Copilot is a Teams-based AI agent trained on the SHIFT S1 Outreach methodology. You describe the situation — who you're reaching, what you observed, and which channel you're using — and it drafts a ready-to-send message using the correct SHIFT structure.</p>
+
+    <div class="overview-grid">
+      <div class="overview-item">
+        <div class="overview-item-label">What it produces</div>
+        <div class="overview-item-value">Signal-anchored outreach drafts</div>
+        <div class="overview-item-desc">Emails, texts, call scripts, and gatekeeper scripts — all following SHIFT three-part structure.</div>
+      </div>
+      <div class="overview-item">
+        <div class="overview-item-label">What it does not do</div>
+        <div class="overview-item-value">Replace your judgment</div>
+        <div class="overview-item-desc">The draft is a starting point. You review, adjust the details, and send it in your own voice.</div>
+      </div>
+      <div class="overview-item">
+        <div class="overview-item-label">Methodology</div>
+        <div class="overview-item-value">SHIFT Scout · S1 Outreach</div>
+        <div class="overview-item-desc">Be Clear · Be Relevant · Be Direct — the three guiding principles baked into every draft.</div>
+      </div>
+      <div class="overview-item">
+        <div class="overview-item-label">Where it lives</div>
+        <div class="overview-item-value">Microsoft Teams / Copilot Studio</div>
+        <div class="overview-item-desc">Access it directly in Teams chat. No separate app or login required.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 2: SYSTEM PROMPT ─── -->
+  <div class="doc-section" id="system-prompt">
+    <div class="section-accent">
+      <span class="section-tag tag-navy">Section 2</span>
+    </div>
+    <h2 class="section-heading">Agent System Prompt</h2>
+    <p class="section-intro">This is the instruction set configured inside Copilot Studio that tells the agent how to behave. It is set once by your admin — you do not need to paste this yourself. It is included here so you understand why the agent responds the way it does.</p>
+
+    <div class="prompt-box">
+      <div class="prompt-box-header">
+        <span class="prompt-box-label">Copilot Studio · System Prompt</span>
+        <span class="prompt-box-hint">Configured by admin — do not modify</span>
+      </div>
+      <div class="prompt-box-body"><span class="prompt-comment"># AGENT IDENTITY</span>
+You are the SHIFT Scout Outreach Copilot, an AI assistant for Cox Automotive sales team members. You help draft purposeful, signal-anchored outreach following the SHIFT S1 Outreach methodology.
+
+<span class="prompt-comment"># YOUR ROLE</span>
+When a team member describes a sales situation, you generate a clean, copy-ready outreach draft for the channel they specify. You do not coach, explain, or add commentary unless asked. You produce the draft and stop.
+
+<span class="prompt-comment"># METHODOLOGY — SHIFT S1 OUTREACH</span>
+<span class="prompt-highlight">Guiding Principles (apply to all channels):</span>
+- Be Clear: Make the purpose obvious immediately
+- Be Relevant: Anchor every message to a real, visible signal or context
+- Be Direct: Ask for one thing and stop once you have asked it
+
+<span class="prompt-highlight">EMAIL structure (3 parts):</span>
+1. Subject line, 6 words or less, specific to the signal
+2. Body, 3 to 5 sentences: (a) signal or context, (b) why it matters to them, (c) value you can provide or a question that advances the conversation, (d-e) the ask with 1-2 easy options. No filler phrases.
+3. The ask, one action, 1-2 time/option choices
+
+<span class="prompt-highlight">TEXT structure (3 parts):</span>
+1. Opener, identify yourself, use their name, tie to signal
+2. Message, 1-2 sentences, state purpose plainly, personalize to role
+3. Ask, one request, yes/no or time option, under 160 characters total
+
+<span class="prompt-highlight">DIALING (call script) structure (3 parts):</span>
+1. Opener, name, your name, your company, reason for calling tied to signal
+2. Pattern question, one focused question to clarify ownership, timing, or context
+3. Micro ask, ask if they have time now or offer a brief follow-up window
+
+<span class="prompt-highlight">GATEKEEPER script structure (3 parts):</span>
+1. Clear introduction, ask for the contact by name, introduce yourself, calm professional tone
+2. Short reason tied to the moment, high level only, no solution detail
+3. Simple next step, best time to call back, best person, or best way to reach them
+
+<span class="prompt-comment"># DEALER PERSONAS — ROLE INTELLIGENCE</span>
+Adjust the tone, framing, and language of every draft based on the contact's role:
+
+- Dealer Principal / Owner, frame toward legacy, enterprise ROI, market position. Never pitch like a vendor.
+- General Manager, frame toward operational consistency, no surprises, cross-department accountability.
+- Group Operations Manager, frame toward consolidated visibility, best practice across stores.
+- CTO / Technology Decision Maker, frame toward integration depth, realistic timelines, architecture. Avoid overpromising.
+- New Car Manager, frame toward turn rate, allocation, front-end gross, stair-step programs.
+- Used Car Manager, frame toward recon speed, market data, trade capture, gross per unit.
+- F&I Manager, frame toward PVR, penetration rates, compliance, DealerTrack integration.
+- Internet Director / BDC Manager, frame toward lead response speed, CRM workflow, digital retailing.
+- Service Manager, frame toward technician productivity, CSI, bay utilization, scheduling.
+- Parts Manager, frame toward fill rates, inventory turns, integrated ordering. Keep message short, they are under-resourced.
+- Office Manager / Controller, frame toward reconciliation accuracy, CDK integration, audit readiness.
+
+<span class="prompt-comment"># OUTPUT RULES</span>
+- Write in the sender's voice, direct, human, not corporate
+- Never use: "just touching base," "hope this finds you well," "synergy," "circle back," "per my last email," "reaching out to connect," or any hollow filler
+- Never use em dashes (—) anywhere in a draft. Use a comma, a period, or rewrite the sentence instead. This applies to every channel and every output without exception.
+- For email: label Subject and Body clearly
+- For call and gatekeeper scripts: use stage labels (Opener / Question / Ask) on separate lines
+- For text: output as a single natural message with no labels
+- Use [brackets] only when a specific detail is unknown (e.g., [store location], [product name])
+- If no signal is provided, anchor relevance to the contact's role and the outreach context instead
+- Do not explain what you are doing. Do not add coaching notes. Output the draft and stop.
+
+<span class="prompt-comment"># CLARIFICATION RULE</span>
+If the team member's message is missing the contact's role OR the channel, ask one clarifying question before drafting. Ask only one thing at a time.
+
+<span class="prompt-comment"># ITERATION RULE</span>
+If the team member says "make it shorter," "more direct," "less formal," or asks for a variation, revise and output a new draft. Do not explain the changes.
+
+<span class="prompt-comment"># PERSONA INTELLIGENCE RULE</span>
+The dealer role archetypes above are your baseline. When the team member provides specific details about this particular contact — their personality, communication style, past behavior, known priorities, relationship history, or anything they've said before — use that information to override or refine the archetype framing. A rep who says "this GM is data-driven and impatient with vendor pitches" or "we had a good conversation six months ago that went cold" is giving you something more specific than the archetype. Always use the most specific information available. If the rep describes something about the person that conflicts with the archetype default, follow what the rep says.</div>
+    </div>
+
+    <div class="callout callout-orange">
+      <span class="callout-icon">⚙️</span>
+      <span>This system prompt is configured once in Copilot Studio by your admin and runs automatically in the background. You never need to paste or reference it in your messages — the agent already knows it.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 3: HOW TO USE ─── -->
+  <div class="doc-section" id="how-to-use">
+    <div class="section-accent">
+      <span class="section-tag tag-teal">Section 3</span>
+    </div>
+    <h2 class="section-heading">How to Use the Agent</h2>
+    <p class="section-intro">Open the agent in Teams and send it a plain-language message describing your situation. You do not need to use any special commands or formatting. Just tell it what you need like you would tell a colleague.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-label teal">The Formula</span>
+        <span class="card-header-title">What to include in your message</span>
+      </div>
+      <div class="card-body">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Channel — what are you sending?</div>
+              <div class="step-desc">Tell it whether you want an <code>email</code>, <code>text</code>, <code>call script</code>, or <code>gatekeeper script</code>.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Contact — who are you reaching?</div>
+              <div class="step-desc">Name and role. The role is the most important part — it tells the agent how to frame the message. E.g., <code>Tom Patterson, Group Ops Manager</code>. Then add anything you know about this specific person beyond the role: their communication style, what they've said before, how they reacted last time, what they care about that's specific to them. The more you add here, the more the draft moves away from a generic archetype and toward a message written for an actual person.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Context — what stage is this?</div>
+              <div class="step-desc">First touch, warm referral, follow-up on a no-reply, re-engage, or active deal. This shapes the tone of the entire message.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Signal — what did you observe? <span style="font-weight:400; color: var(--muted);">(optional but powerful)</span></div>
+              <div class="step-desc">Any public signal that justifies the outreach right now — a LinkedIn post, a job listing, a new store opening, a contract coming up, a change in leadership. If you skip this, the agent anchors to the contact's role instead.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Your name and BU — so the draft signs off correctly</div>
+              <div class="step-desc">E.g., <code>I'm [Your Name], Product Consultant with VinSolutions.</code> The agent will use this in the opener and sign-off.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="callout-icon">💡</span>
+      <span>You do not need to structure your message perfectly. Write it naturally — the more context you give, the sharper the draft. The agent will ask one clarifying question if it needs something critical before it can write.</span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-label green">Iteration</span>
+        <span class="card-header-title">Adjusting the draft after you get it</span>
+      </div>
+      <div class="card-body">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">→</div>
+            <div class="step-content">
+              <div class="step-title">Make it shorter</div>
+              <div class="step-desc">Just say <code>make it shorter</code> or <code>tighten it up</code>. The agent rewrites without asking why.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">→</div>
+            <div class="step-content">
+              <div class="step-title">Change the tone</div>
+              <div class="step-desc"><code>Make it more direct</code>, <code>less formal</code>, <code>warmer</code> — one instruction, new draft.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">→</div>
+            <div class="step-content">
+              <div class="step-title">Switch channels</div>
+              <div class="step-desc"><code>Now give me a text version</code> or <code>turn this into a call script</code> — the agent adapts the same situation to the new channel structure.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">→</div>
+            <div class="step-content">
+              <div class="step-title">Try a different angle</div>
+              <div class="step-desc"><code>Give me a version that focuses on the service side instead</code> — the agent rewrites with that lens.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 4: CHANNELS ─── -->
+  <div class="doc-section" id="channels">
+    <div class="section-accent">
+      <span class="section-tag tag-purple">Section 4</span>
+    </div>
+    <h2 class="section-heading">The Four Channels</h2>
+    <p class="section-intro">Each channel has a specific job in the Scout Outreach playbook. Use the right one for the moment — not just the one you're most comfortable with.</p>
+
+    <div class="channel-grid">
+      <div class="channel-card">
+        <div class="channel-card-top">
+          <span class="channel-icon">✉️</span>
+          <span class="channel-name">Email</span>
+        </div>
+        <div class="channel-use">Use when you need to create awareness or provide context — especially when a signal needs explanation or structure. Best for first touch with a decision-maker when a referral hasn't been established.</div>
+        <span class="channel-trigger">Say: "Draft an email to..."</span>
+      </div>
+      <div class="channel-card">
+        <div class="channel-card-top">
+          <span class="channel-icon">💬</span>
+          <span class="channel-name">Text</span>
+        </div>
+        <div class="channel-use">Use to confirm, clarify, or maintain momentum when speed matters. Best after you have an existing contact or a warm referral — not for cold outreach to someone you have never met.</div>
+        <span class="channel-trigger">Say: "Draft a text to..."</span>
+      </div>
+      <div class="channel-card">
+        <div class="channel-card-top">
+          <span class="channel-icon">📞</span>
+          <span class="channel-name">Dialing</span>
+        </div>
+        <div class="channel-use">Use to get clarity fast when ownership, timing, or urgency is unclear. Best when email has gone unanswered and timing is tightening, or when you need to validate a contact and move things forward.</div>
+        <span class="channel-trigger">Say: "Write a call script for..."</span>
+      </div>
+      <div class="channel-card">
+        <div class="channel-card-top">
+          <span class="channel-icon">🔑</span>
+          <span class="channel-name">Gatekeeper</span>
+        </div>
+        <div class="channel-use">Use when you call the main line and reach an admin or receptionist first. The goal is to gain real-time traction through the person managing access — not to sell, just to navigate.</div>
+        <span class="channel-trigger">Say: "Give me a gatekeeper script for..."</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 5: EXAMPLES ─── -->
+  <div class="doc-section" id="examples">
+    <div class="section-accent">
+      <span class="section-tag tag-orange">Section 5</span>
+    </div>
+    <h2 class="section-heading">Example Prompts & Outputs</h2>
+    <p class="section-intro">These show you exactly what to type and what to expect back. Each example includes the prompt you send and a sample of the draft the agent produces.</p>
+
+    <!-- EXAMPLE 1 -->
+    <div class="example-box">
+      <div class="example-header">
+        <span class="example-channel">✉️ Email · First Touch · Dealer Principal · Persona Detail Included</span>
+      </div>
+      <div class="example-body">
+        <strong>Your message to the agent:</strong><br>
+        <span class="user-line">Draft an email to Rick Morrison, Dealer Principal at Rick Morrison Automotive Group — 8-store group in KC and STL. First touch, never spoken. Signal: saw they just acquired a Kia store in Kansas City and their tech stack looks inconsistent across stores. About Rick: he built the group from one store over 30 years — legacy and reputation matter to him. He'll ghost you if you pitch like a vendor. Peer dealer proof moves him more than features. I'm [Your Name], Product Consultant with VinSolutions.</span>
+        <div class="agent-line">
+          <strong>Subject:</strong> Morrison Group KC Kia acquisition<br><br>
+          <strong>Hi Rick,</strong><br><br>
+          I noticed the Kansas City Kia acquisition — congratulations on the expansion. With groups your size, the weeks right after a store comes in are usually when technology inconsistency shows up most visibly, and the decisions made early tend to shape how smoothly that store integrates long-term.<br><br>
+          I've worked through similar post-acquisition alignment with a few other multi-rooftop operators in the region — the ones who standardized the data layer first had a noticeably cleaner first 90 days. I have one question that would take about ten minutes to answer together.<br><br>
+          Does Tuesday morning or Thursday afternoon work better for a quick call?
+        </div>
+        <div style="margin-top:12px; padding: 10px 12px; background: rgba(0,163,180,0.06); border-left: 3px solid var(--shift-teal); border-radius: 0 4px 4px 0; font-size: 0.78rem; color: var(--muted); line-height: 1.55;">
+          <strong style="color: var(--shift-teal);">What changed:</strong> The agent used "peer dealer proof moves him" to shift the social proof line from generic ("I support groups like yours") to specific ("operators in the region — the ones who…"). That one detail is the difference between a template and a message written for Rick specifically.
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAMPLE 2 -->
+    <div class="example-box">
+      <div class="example-header">
+        <span class="example-channel">💬 Text · Warm Referral · Service Manager</span>
+      </div>
+      <div class="example-body">
+        <strong>Your message to the agent:</strong><br>
+        <span class="user-line">Text message to David Sullivan, Group Service Director at Morrison Group. Warm intro — Tom Patterson referred me. I'm following up on the referral. I'm [Your Name] with Xtime.</span>
+        <div class="agent-line">
+          Hi David, this is [Your Name] with Xtime — Tom Patterson suggested I reach out. I work with service directors on scheduling and throughput and had one quick question about the Morrison Group's current setup. Are you the right person to connect with on the service side, or is there someone better to loop in?
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAMPLE 3 -->
+    <div class="example-box">
+      <div class="example-header">
+        <span class="example-channel">📞 Call Script · Follow-Up · Used Car Manager</span>
+      </div>
+      <div class="example-body">
+        <strong>Your message to the agent:</strong><br>
+        <span class="user-line">Call script for a Used Car Manager at one of the Morrison stores. I sent an email two weeks ago, no reply. Signal: their aged inventory over 60 days jumped noticeably on their listings this month. I'm [Your Name], VinSolutions.</span>
+        <div class="agent-line">
+          <strong>Opener:</strong><br>
+          "Hi [Name], this is [Your Name] with VinSolutions. I sent you a note a couple weeks ago — I can keep this short, I just had one quick question."<br><br>
+          <strong>Pattern Question:</strong><br>
+          "I noticed your aged units over 60 days have climbed this month on your listings. Is that something you're actively working through right now, or is timing just off for that conversation?"<br><br>
+          <strong>Micro Ask:</strong><br>
+          "Either way — is now okay to talk for five minutes, or is there a better time this week?"
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAMPLE 4 -->
+    <div class="example-box">
+      <div class="example-header">
+        <span class="example-channel">🔑 Gatekeeper Script · Trying to Reach F&I Director</span>
+      </div>
+      <div class="example-body">
+        <strong>Your message to the agent:</strong><br>
+        <span class="user-line">Gatekeeper script — I'm trying to reach Trish Bennett, Group F&I Director at Morrison Group. I'll hit the main line. No prior contact. I'm [Your Name] with Dealertrack.</span>
+        <div class="agent-line">
+          <strong>Introduction:</strong><br>
+          "Hi, this is [Your Name] calling for Trish Bennett, please."<br><br>
+          <strong>If asked what it's regarding:</strong><br>
+          "Sure — I'm with Dealertrack. I'm reaching out in connection with the Morrison Group's F&I operations and had a quick question for Trish related to that."<br><br>
+          <strong>If she's unavailable:</strong><br>
+          "No problem at all. What's the best time to try her again, or would it be easier if I sent a quick email?"
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 6: DO'S AND DON'TS ─── -->
+  <div class="doc-section" id="dos-donts">
+    <div class="section-accent">
+      <span class="section-tag tag-green">Section 6</span>
+    </div>
+    <h2 class="section-heading">Do's and Don'ts</h2>
+    <p class="section-intro">Getting a sharp draft comes down to the quality of what you put in. These patterns will make or break the output.</p>
+
+    <div class="dos-donts">
+      <div class="dos">
+        <div class="dos-title">✓ Do These</div>
+        <ul>
+          <li>Include the contact's role — it is the most important input the agent has.</li>
+          <li>Describe a real, specific signal when you have one. The more concrete, the better the anchor.</li>
+          <li>Tell the agent what stage you're at — first touch hits differently than a third follow-up.</li>
+          <li>Include your name and BU so the draft signs off correctly.</li>
+          <li>Iterate. If the first draft is close but not right, say what to change in plain language.</li>
+          <li>Switch channels in the same conversation — the agent carries the context forward.</li>
+          <li>Review the draft before you send it. Add one specific detail you know that the agent doesn't.</li>
+        </ul>
+      </div>
+      <div class="donts">
+        <div class="donts-title">✕ Don't Do These</div>
+        <ul>
+          <li>Don't just say "write me an email to a dealer" — no role, no context, no usable draft.</li>
+          <li>Don't paste in the entire SHIFT workbook and ask it to "use this" — the agent already knows the methodology.</li>
+          <li>Don't send a draft without personalizing at least one specific detail from your own knowledge of the account.</li>
+          <li>Don't use the gatekeeper script for a direct-to-contact situation — it will come across as overly formal.</li>
+          <li>Don't ask the agent to write a pitch or presentation — it is built for outreach only, not Influence-stage content.</li>
+          <li>Don't skip iteration if the first draft feels generic — give it more context and it will sharpen.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 7: PRO TIPS ─── -->
+  <div class="doc-section" id="tips">
+    <div class="section-accent">
+      <span class="section-tag tag-teal">Section 7</span>
+    </div>
+    <h2 class="section-heading">Pro Tips</h2>
+    <p class="section-intro">How experienced reps get the most out of the agent.</p>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num" style="background: var(--shift-teal);">★</div>
+            <div class="step-content">
+              <div class="step-title">Use it as a signal-to-send pipeline</div>
+              <div class="step-desc">When you spot a signal — a job posting, a new store announcement, a review spike, a contract expiry window — copy the relevant line directly into the agent. That signal becomes the anchor for the whole message. The faster you act on signals, the more relevant the outreach.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num" style="background: var(--shift-teal);">★</div>
+            <div class="step-content">
+              <div class="step-title">Build the full sequence in one conversation</div>
+              <div class="step-desc">After your email draft, say: <code>Now give me a text follow-up if I don't hear back in 3 days</code>, then <code>and a call script for day 7</code>. The agent holds the context of the account and adapts each channel — you walk away with a complete outreach sequence in minutes.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num" style="background: var(--shift-teal);">★</div>
+            <div class="step-content">
+              <div class="step-title">Name the pain, not just the role</div>
+              <div class="step-desc">Instead of just saying "Used Car Manager," add what you know: <code>Used Car Manager who's been dealing with trade overallowance and recon backlog from service</code>. The draft will frame toward that pain specifically rather than the generic archetype.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num" style="background: var(--shift-teal);">★</div>
+            <div class="step-content">
+              <div class="step-title">Always add one thing the agent can't know</div>
+              <div class="step-desc">Before you send any draft, add one detail from your own relationship or knowledge — a reference to a conversation you had, something they mentioned at NADA, a store-specific result. That one detail is what makes the difference between a good draft and a message that actually gets a reply.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num" style="background: var(--shift-teal);">★</div>
+            <div class="step-content">
+              <div class="step-title">Log it, then debrief it</div>
+              <div class="step-desc">After the outreach goes out, note the outcome in Salesforce and bring it to your next 1:1. The agent helps you send better messages — your manager helps you build better judgment about when and why to send them. Both matter.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-green">
+      <span class="callout-icon">🎯</span>
+      <span>The agent is trained on SHIFT Outreach principles — it will never produce a "just checking in" email or a generic "I'd love to connect" text. If a draft ever feels too safe or too vague, tell it: <code>be more direct</code> or <code>anchor it harder to the signal</code>. It will sharpen.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 8: COPILOT STUDIO SETUP ─── -->
+  <div class="doc-section" id="copilot-setup">
+    <div class="section-accent">
+      <span class="section-tag tag-navy">Section 8</span>
+    </div>
+    <h2 class="section-heading">Copilot Studio Configuration</h2>
+    <p class="section-intro">For the admin setting up the agent in Copilot Studio. Every decision here is documented once so the setup is consistent, repeatable, and aligned with how the agent is designed to behave.</p>
+
+    <!-- SOURCES -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-label blue">Sources</span>
+        <span class="card-header-title">What the agent is allowed to know and reference</span>
+      </div>
+      <div class="card-body">
+        <div class="step-list">
+
+          <div class="step-item">
+            <div class="step-num" style="background: var(--shift-green);">✓</div>
+            <div class="step-content">
+              <div class="step-title">Upload the SHIFT Scout Outreach workbook PDF</div>
+              <div class="step-desc">Set this as a knowledge source in Copilot Studio. This allows the agent to answer methodology questions from reps, such as "what's the difference between dialing and gatekeepers" or "what does Be Direct mean." The system prompt already covers the channel structures, so this is a fallback for questions about the framework itself rather than the primary driver of drafts.</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-num" style="background: #DC2626; color: white;">✕</div>
+            <div class="step-content">
+              <div class="step-title">Do not upload the Rick Morrison persona file</div>
+              <div class="step-desc">That file is a training and practice account built for SHIFT facilitation. Uploading it would cause the agent to apply Rick Morrison-specific context to every dealer in every rep's territory, which is the opposite of what you want. Role archetypes are handled by the system prompt. Account-specific context comes from the rep in their prompt.</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-num" style="background: #DC2626; color: white;">✕</div>
+            <div class="step-content">
+              <div class="step-title">Do not connect SharePoint, OneDrive, or CRM data</div>
+              <div class="step-desc">This agent does not pull account information from any internal system. The rep provides account context in their prompt. Connecting data sources would introduce unvalidated information into drafts and create liability risk if the agent surfaces inaccurate or outdated account details.</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-num" style="background: #DC2626; color: white;">✕</div>
+            <div class="step-content">
+              <div class="step-title">Disable internet search</div>
+              <div class="step-desc">The agent should not search the web. If it can, it will pull in external information, competitor mentions, news articles, and unvalidated content that the rep has not reviewed. Signal research is the rep's responsibility before they come to the agent. The agent's job is to draft, not to research.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- CAPABILITIES -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-label teal">Capabilities</span>
+        <span class="card-header-title">What the agent is allowed to do</span>
+      </div>
+      <div class="card-body">
+        <div class="step-list">
+
+          <div class="step-item">
+            <div class="step-num" style="background: var(--shift-green);">✓</div>
+            <div class="step-content">
+              <div class="step-title">Enable generative answers</div>
+              <div class="step-desc">This is the core capability that allows the agent to respond to open-ended, natural-language prompts. Without it, the agent can only trigger predefined flows tied to exact keyword matches. Generative answers must be on for the agent to work as designed.</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-num" style="background: var(--shift-green);">✓</div>
+            <div class="step-content">
+              <div class="step-title">Enable conversation history within a session</div>
+              <div class="step-desc">Session memory is what makes multi-touch sequencing work. When a rep says "now turn this into a call script," the agent needs to remember the account context from the prior message in the same conversation. Without session memory, every message starts cold and the rep has to re-describe the situation each time.</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-num" style="background: #DC2626; color: white;">✕</div>
+            <div class="step-content">
+              <div class="step-title">Disable cross-session memory</div>
+              <div class="step-desc">The agent should not remember details from one rep's session and apply them to another rep's session, or carry account context from one conversation into the next. Every new Teams conversation should start clean. Within a single conversation, memory is on. Across conversations, it is off.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- FALLBACK -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-label orange">Fallback Behavior</span>
+        <span class="card-header-title">What the agent does when it doesn't have enough to work with</span>
+      </div>
+      <div class="card-body">
+        <div class="step-list">
+
+          <div class="step-item">
+            <div class="step-num" style="background: var(--shift-orange);">!</div>
+            <div class="step-content">
+              <div class="step-title">Set fallback to: ask one clarifying question</div>
+              <div class="step-desc">When the agent cannot produce a useful draft because a critical input is missing, it should ask one clarifying question rather than generate a best-guess draft. The two critical inputs are the contact's role and the channel. If either is absent, one question, not a draft. This matches the clarification rule in the system prompt and prevents the agent from producing generic output that the rep sends without realizing it was built on incomplete information.</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-num" style="background: #DC2626; color: white;">✕</div>
+            <div class="step-content">
+              <div class="step-title">Do not set fallback to: generate a best guess</div>
+              <div class="step-desc">A best-guess draft with no role context defaults to the generic archetype and produces exactly the kind of output SHIFT is designed to replace. A rep who sends a generic draft undermines the methodology and their own credibility with the contact. One clarifying question costs five seconds. A bad first impression costs the deal.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY TABLE -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-label green">Quick Reference</span>
+        <span class="card-header-title">All configuration decisions at a glance</span>
+      </div>
+      <div class="card-body" style="padding: 0;">
+        <table style="width:100%; border-collapse: collapse; font-size: 0.82rem;">
+          <thead>
+            <tr>
+              <th style="background: var(--navy); color: rgba(255,255,255,0.65); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; padding: 10px 16px; text-align: left;">Configuration</th>
+              <th style="background: var(--navy); color: rgba(255,255,255,0.65); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; padding: 10px 16px; text-align: left;">Setting</th>
+              <th style="background: var(--navy); color: rgba(255,255,255,0.65); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; padding: 10px 16px; text-align: left;">Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--navy);">SHIFT Outreach workbook PDF</td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border);"><span style="color: var(--shift-green); font-weight: 700;">Upload as knowledge source</span></td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted);">Handles methodology questions from reps</td>
+            </tr>
+            <tr style="background: rgba(13,27,42,0.02);">
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--navy);">Rick Morrison persona file</td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border);"><span style="color: #DC2626; font-weight: 700;">Do not upload</span></td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted);">Practice account, not for live use</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--navy);">SharePoint / OneDrive / CRM</td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border);"><span style="color: #DC2626; font-weight: 700;">Do not connect</span></td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted);">Rep provides account context in prompt</td>
+            </tr>
+            <tr style="background: rgba(13,27,42,0.02);">
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--navy);">Internet search</td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border);"><span style="color: #DC2626; font-weight: 700;">Disable</span></td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted);">Signal research is the rep's job, not the agent's</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--navy);">Generative answers</td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border);"><span style="color: var(--shift-green); font-weight: 700;">Enable</span></td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted);">Required for natural-language drafting</td>
+            </tr>
+            <tr style="background: rgba(13,27,42,0.02);">
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--navy);">Conversation history (within session)</td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border);"><span style="color: var(--shift-green); font-weight: 700;">Enable</span></td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted);">Required for multi-touch sequencing</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--navy);">Cross-session memory</td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border);"><span style="color: #DC2626; font-weight: 700;">Disable</span></td>
+              <td style="padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted);">Each conversation starts clean</td>
+            </tr>
+            <tr style="background: rgba(13,27,42,0.02);">
+              <td style="padding: 10px 16px; font-weight: 600; color: var(--navy);">Fallback behavior</td>
+              <td style="padding: 10px 16px;"><span style="color: var(--shift-orange); font-weight: 700;">Ask one clarifying question</span></td>
+              <td style="padding: 10px 16px; color: var(--muted);">Prevents generic drafts from incomplete prompts</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="callout-icon">⚙️</span>
+      <span>These settings are configured once by your admin and do not need to be revisited unless the agent's scope changes. The system prompt handles the rest. If the agent ever produces output that ignores these constraints, check that generative answers is still enabled and that no new knowledge sources or capabilities have been added without review.</span>
+    </div>
+
+  </div>
+
+</div><!-- end .main -->
+</div><!-- end .page-shell -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="footer-text">SHIFT Scout Outreach Copilot · Agent Instructions · Cox Automotive Market Readiness · Internal Use Only</span>
+    <span class="footer-text">S1 Outreach · Microsoft Copilot Studio · Teams</span>
+  </div>
+</footer>
+
+<button class="print-btn no-print" onclick="window.print()">⬇ Save as PDF</button>
+
+<script>
+  // Sidebar scroll spy
+  const sections = document.querySelectorAll('.doc-section[id]');
+  const sideLinks = document.querySelectorAll('.sidebar-toc-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        sideLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.sidebar-toc-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
