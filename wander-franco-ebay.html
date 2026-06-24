@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eBay: Wander Franco Card Collection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ebay-blue: #3665f3;
+      --ebay-red: #e53238;
+      --ebay-yellow: #f5af02;
+      --ebay-green: #86b817;
+      --bg: #f3f3f3;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --muted: #767676;
+      --border: #e0e0e0;
+      --warning: #fff3cd;
+      --warning-border: #ffc107;
+    }
+
+    body {
+      font-family: 'Libre Franklin', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* eBay-style top nav */
+    .topbar {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .topbar-logo {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      font-family: 'Libre Franklin', sans-serif;
+    }
+    .topbar-logo span:nth-child(1) { color: var(--ebay-blue); }
+    .topbar-logo span:nth-child(2) { color: var(--ebay-red); }
+    .topbar-logo span:nth-child(3) { color: var(--ebay-yellow); }
+    .topbar-logo span:nth-child(4) { color: var(--ebay-green); }
+
+    .topbar-search {
+      flex: 1;
+      max-width: 500px;
+      display: flex;
+    }
+    .topbar-search input {
+      flex: 1;
+      border: 2px solid var(--text);
+      border-right: none;
+      padding: 6px 10px;
+      font-size: 14px;
+      border-radius: 25px 0 0 25px;
+      outline: none;
+    }
+    .topbar-search button {
+      background: var(--ebay-blue);
+      color: white;
+      border: none;
+      padding: 6px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      border-radius: 0 25px 25px 0;
+      font-size: 14px;
+    }
+
+    .breadcrumb {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 6px 20px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .breadcrumb a { color: var(--ebay-blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .layout {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+    }
+
+    /* Left column */
+    .image-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .main-image {
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 2.5/3.5;
+      background: linear-gradient(135deg, #1a3a5c 0%, #0d2137 60%, #8b0000 100%);
+      border-radius: 8px;
+      margin: 0 auto 12px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .card-year { color: #aaa; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+    .card-team { color: #f5af02; font-size: 13px; font-weight: 700; letter-spacing: 2px; margin-bottom: 4px; }
+    .card-name {
+      font-family: 'PT Serif', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      line-height: 1.1;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .card-position { color: #ccc; font-size: 11px; letter-spacing: 2px; margin-top: 6px; }
+    .card-silhouette {
+      font-size: 64px;
+      margin: 8px 0;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+    }
+    .card-foil {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--ebay-yellow);
+      color: #333;
+      font-size: 9px;
+      font-weight: 900;
+      padding: 3px 6px;
+      border-radius: 3px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .card-caution {
+      position: absolute;
+      bottom: 8px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 9px;
+      color: rgba(255,255,255,0.4);
+      font-style: italic;
+    }
+
+    .thumbnail-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .thumb {
+      width: 52px;
+      height: 72px;
+      background: linear-gradient(135deg, #1a3a5c, #8b0000);
+      border-radius: 4px;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .thumb:hover { border-color: var(--ebay-blue); }
+
+    .condition-badge {
+      display: inline-block;
+      background: #e8f4e8;
+      color: #2d7a2d;
+      border: 1px solid #b5d9b5;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-top: 10px;
+    }
+
+    /* Right column - listing info */
+    .listing-info {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .listing-title {
+      font-family: 'PT Serif', serif;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    .listing-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .listing-meta span { color: var(--ebay-green); font-weight: 700; }
+
+    .price-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 16px;
+    }
+    .was-price {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: line-through;
+      margin-bottom: 2px;
+    }
+    .current-price {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--ebay-red);
+      margin-bottom: 4px;
+    }
+    .price-note {
+      font-size: 11px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .shipping-info {
+      font-size: 13px;
+      color: var(--text);
+      margin-top: 8px;
+    }
+    .shipping-info strong { color: var(--ebay-green); }
+
+    .btn-buy {
+      display: block;
+      width: 100%;
+      background: var(--ebay-blue);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      font-family: 'Libre Franklin', sans-serif;
+      letter-spacing: 0.3px;
+    }
+    .btn-buy:hover { background: #2851d8; }
+
+    .btn-offer {
+      display: block;
+      width: 100%;
+      background: white;
+      color: var(--ebay-blue);
+      border: 2px solid var(--ebay-blue);
+      border-radius: 25px;
+      padding: 11px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      font-family: 'Libre Franklin', sans-serif;
+    }
+    .btn-offer:hover { background: #f0f4ff; }
+
+    .warning-box {
+      background: var(--warning);
+      border: 1px solid var(--warning-border);
+      border-radius: 4px;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .warning-box strong { display: block; margin-bottom: 4px; font-size: 13px; }
+
+    .seller-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 12px;
+      font-size: 13px;
+    }
+    .seller-name { font-weight: 700; color: var(--ebay-blue); }
+    .seller-rating { color: var(--ebay-yellow); font-size: 16px; }
+    .seller-feedback { font-size: 11px; color: var(--muted); }
+
+    /* Description section below grid */
+    .description-section {
+      grid-column: 1 / -1;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 24px;
+    }
+
+    .desc-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 20px;
+      gap: 0;
+    }
+    .desc-tab {
+      padding: 10px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      color: var(--muted);
+    }
+    .desc-tab.active {
+      color: var(--ebay-blue);
+      border-bottom-color: var(--ebay-blue);
+    }
+
+    .desc-body {
+      font-family: 'PT Serif', serif;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #333;
+    }
+    .desc-body h3 {
+      font-size: 18px;
+      margin: 20px 0 8px;
+      font-family: 'Libre Franklin', sans-serif;
+      font-weight: 900;
+      color: var(--text);
+    }
+    .desc-body p { margin-bottom: 12px; }
+    .desc-body ul { padding-left: 20px; margin-bottom: 12px; }
+    .desc-body li { margin-bottom: 6px; }
+    .desc-body .disclaimer {
+      font-size: 11px;
+      color: var(--muted);
+      font-style: italic;
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+      padding-top: 12px;
+    }
+
+    .item-specifics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+    .spec-row {
+      display: contents;
+    }
+    .spec-label {
+      background: #f7f7f7;
+      padding: 8px 12px;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+    .spec-value {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Reviews */
+    .review {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+      font-size: 13px;
+    }
+    .review:last-child { border-bottom: none; }
+    .review-user { font-weight: 700; color: var(--ebay-blue); }
+    .review-stars { color: var(--ebay-yellow); }
+    .review-text { margin-top: 4px; font-style: italic; color: #444; }
+
+    @media (max-width: 680px) {
+      .layout { grid-template-columns: 1fr; }
+      .description-section { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Nav -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <span>e</span><span>B</span><span>a</span><span>y</span>
+  </div>
+  <div class="topbar-search">
+    <input type="text" value="wander franco cards fire sale" />
+    <button>Search</button>
+  </div>
+</div>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <a href="#">Sports Cards</a> &rsaquo;
+  <a href="#">Baseball</a> &rsaquo;
+  <a href="#">Tampa Bay Rays</a> &rsaquo;
+  <a href="#">Shortstops (Former)</a> &rsaquo;
+  <strong>Wander Franco Lot — Priced To Move (Please)</strong>
+</div>
+
+<!-- Main Layout -->
+<div class="layout">
+
+  <!-- Left: Images -->
+  <div>
+    <div class="image-section">
+      <div class="main-image">
+        <div class="card-foil">ROOKIE</div>
+        <div class="card-year">2021</div>
+        <div class="card-silhouette">⚾</div>
+        <div class="card-team">TAMPA BAY RAYS</div>
+        <div class="card-name">WANDER<br>FRANCO</div>
+        <div class="card-position">SS &bull; #5</div>
+        <div class="card-caution">*not responsible for future headlines</div>
+      </div>
+      <div class="condition-badge">✓ Near Mint / Mint</div>
+      <div class="thumbnail-row">
+        <div class="thumb">🃏</div>
+        <div class="thumb">🃏</div>
+        <div class="thumb">🃏</div>
+        <div class="thumb">🃏</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Listing Info -->
+  <div class="listing-info">
+
+    <div>
+      <div class="listing-title">
+        LOT: Wander Franco Baseball Card Collection (14 cards) — Generational Talent, Legendary Decisions 🔥
+      </div>
+      <div class="listing-meta">
+        Condition: Near Mint &nbsp;|&nbsp; <span>✓ 47 sold</span> &nbsp;|&nbsp; 🔥 312 watching
+      </div>
+    </div>
+
+    <div class="price-box">
+      <div class="was-price">Was: $340.00</div>
+      <div class="current-price">$18.50</div>
+      <div class="price-note">or best offer — I am begging you</div>
+      <div class="shipping-info">
+        <strong>FREE shipping</strong> — at this point I'll pay YOU to take these
+      </div>
+      <button class="btn-buy">Buy It Now</button>
+      <button class="btn-offer">Make Offer (Any Offer. Truly.)</button>
+    </div>
+
+    <div class="warning-box">
+      <strong>⚠️ Seller Disclosure</strong>
+      These cards were purchased with genuine hope and boundless optimism. Both have since been discontinued. Cards are in excellent condition. Seller's dignity is not.
+    </div>
+
+    <div class="seller-box">
+      <div class="seller-name">CardboardDreams_2019</div>
+      <div class="seller-rating">★★★★★</div>
+      <div class="seller-feedback">99.8% positive feedback &bull; "Ships fast, cries quietly"</div>
+    </div>
+
+  </div>
+
+  <!-- Full Description -->
+  <div class="description-section">
+    <div class="desc-tabs">
+      <div class="desc-tab active">Description</div>
+      <div class="desc-tab">Shipping & Returns</div>
+      <div class="desc-tab">Seller Therapy Journal</div>
+    </div>
+
+    <div class="desc-body">
+      <h3>About This Listing</h3>
+      <p>
+        Welcome, fellow optimist. You are looking at a lovingly curated collection of <strong>14 Wander Franco baseball cards</strong>, acquired between 2021 and 2023 during a period historians will call <em>"The Before Times."</em>
+      </p>
+      <p>
+        Wander Franco was, by all accounts, the most exciting shortstop prospect in a generation. A $182 million contract. Hall of Fame trajectory. The kind of player you build a collection around. And then — much like a perfect game ruined by a walk in the 8th — things went sideways. Spectacularly. Historically sideways.
+      </p>
+      <p>
+        The cardboard, however? <strong>Flawless.</strong> These cards have done absolutely nothing wrong. They showed up, they looked great, they did their jobs. Unlike their subject, they stayed in their sleeves.
+      </p>
+
+      <h3>What's Included</h3>
+      <ul>
+        <li>2021 Topps Chrome Wander Franco RC — PSA 9 (the card peaked appropriately)</li>
+        <li>2021 Bowman Chrome Prospect Auto — still signed, still pretty, still haunting</li>
+        <li>2022 Topps Series 1 Base — simpler times</li>
+        <li>2022 Stadium Club — gorgeous photography of a man who had OPTIONS</li>
+        <li>2023 Topps Heritage — minted months before irony fully set in</li>
+        <li>+9 additional base, parallels, and inserts — each a small monument to hope</li>
+      </ul>
+
+      <h3>Investment Thesis</h3>
+      <p>
+        Is this a good investment? That depends entirely on your definition of "good" and how you feel about suspended MLB players. Some would say these cards have nowhere to go but up. Those people are optimists. I used to be one of those people. I am selling you their cards now.
+      </p>
+      <p>
+        Think of it like buying real estate in a city that <em>might</em> bounce back. Sure, there's some history there. Sure, the neighborhood went through some stuff. But the bones are good. The bones are GREAT. The bones hit .315 in the minors.
+      </p>
+
+      <h3>Condition Notes</h3>
+      <p>All cards stored in penny sleeves inside top loaders, inside a binder, inside a fire safe, inside my will to live (still partially intact). Centering is excellent. Corners are sharp. Seller's expectations: thoroughly rounded.</p>
+
+      <div class="item-specifics">
+        <div class="spec-row"><div class="spec-label">Player</div><div class="spec-value">Wander Franco (you know the one)</div></div>
+        <div class="spec-row"><div class="spec-label">Team</div><div class="spec-value">Tampa Bay Rays / Complicated</div></div>
+        <div class="spec-row"><div class="spec-label">Position</div><div class="spec-value">SS (Suspended Shortstop)</div></div>
+        <div class="spec-row"><div class="spec-label">Card Count</div><div class="spec-value">14 cards (0 regrets, 14 regrets)</div></div>
+        <div class="spec-row"><div class="spec-label">Condition</div><div class="spec-value">Near Mint / Seller is not</div></div>
+        <div class="spec-row"><div class="spec-label">Includes Auto?</div><div class="spec-value">Yes. It's still real. It still hurts.</div></div>
+        <div class="spec-row"><div class="spec-label">Why Selling?</div><div class="spec-value">Closure. Mostly closure.</div></div>
+        <div class="spec-row"><div class="spec-label">Return Policy</div><div class="spec-value">No returns. You knew what this was.</div></div>
+      </div>
+
+      <h3>Recent Buyer Reviews</h3>
+
+      <div class="review">
+        <div class="review-user">RookieCardRandy</div>
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Cards arrived in perfect condition. I showed my wife. She sighed. 10/10 would buy again."</div>
+      </div>
+
+      <div class="review">
+        <div class="review-user">SpeculativeSteve99</div>
+        <div class="review-stars">★★★★☆</div>
+        <div class="review-text">"Genuinely beautiful cards. Took one star off because the seller included a handwritten note that just said 'I'm sorry.' Kind of set the mood."</div>
+      </div>
+
+      <div class="review">
+        <div class="review-user">FlipperMike_Cards</div>
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Fast shipping. Cards look great. Seller responded to every message within 30 seconds, which tells me they have a lot of free time now."</div>
+      </div>
+
+      <p class="disclaimer">
+        Disclaimer: Seller is not responsible for any emotional attachment formed to these cards, subsequent disappointment upon Googling the player, or the vague existential feeling that follows. All sales final. No refunds. Not for the cards, and not for the time we've all lost.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
